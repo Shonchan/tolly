@@ -178,6 +178,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         TCG\Voyager\VoyagerServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
+        Orchestra\Parser\XmlServiceProvider::class,
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
@@ -231,6 +233,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
+        'XmlParser' => Orchestra\Parser\Xml\Facade::class,
 
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],

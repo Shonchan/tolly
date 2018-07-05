@@ -13,11 +13,17 @@
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
+Route::middleware('guest')->group(function () {
+    Route::get( '/', 'IndexController@index' );
 
-Route::get('/', 'IndexController@index');
-Route::get( '/category/{url}', 'Views\ProductController@index' )->name('category');
-Route::get( '/products/{url}', 'Views\ProductController@show' )->name('product');
-
-Route::get( '/{url}', 'Views\PagesController@show' )->name('page');
+    Route::get( '/products/{url}', 'Views\ProductController@show' )->name( 'product' );
+    Route::get('/cart', 'Views\OrderController@cart');
+    Route::post('/cart', 'Views\OrderController@addToCart')->name('addToCart');
+    Route::post('/order', 'Views\OrderController@create')->name('createOrder');
+    Route::post('/order/success', 'Views\OrderController@store');
+    Route::get('/order/{hash}', 'Views\OrderController@show');
+    Route::get( '/{url}', 'Views\ProductController@index' )->name( 'category' );
+//    Route::get( '/{url}', 'Views\PagesController@show' )->name( 'page' );
+});
 
 

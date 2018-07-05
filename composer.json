@@ -9,8 +9,12 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
+        "dkrnl/SimpleXMLReader": "^1.1",
+        "jdavidbakr/replaceable-model": "^1.0",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
+        "laravelcollective/html": "^5.4.0",
+        "orchestra/parser": "~3.4",
         "tcg/voyager": "^1.1"
     },
     "require-dev": {

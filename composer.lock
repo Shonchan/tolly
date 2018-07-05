@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "146af1e95aa35fdf56b3393707a70e85",
+    "content-hash": "d3f64394eb0ca9768402680e5ff800f9",
     "packages": [
         {
             "name": "arrilot/laravel-widgets",
@@ -326,6 +326,52 @@
                 "validator"
             ],
             "time": "2018-04-30T10:33:04+00:00"
+        },
+        {
+            "name": "dkrnl/simplexmlreader",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dkrnl/SimpleXMLReader.git",
+                "reference": "937ffa10ceda80ad51b071862462251169db3a9a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dkrnl/SimpleXMLReader/zipball/937ffa10ceda80ad51b071862462251169db3a9a",
+                "reference": "937ffa10ceda80ad51b071862462251169db3a9a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-xmlreader": "*",
+                "lib-libxml": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "PDDL-1.0"
+            ],
+            "authors": [
+                {
+                    "name": "dkrnl",
+                    "homepage": "http://dpyatkov.ru/"
+                }
+            ],
+            "description": "Wrapper XMLReader class, for simple SAX-reading(and simple XPath-queries) of huge(testing over 1G file) xml.",
+            "homepage": "https://github.com/dkrnl/SimpleXMLReader",
+            "keywords": [
+                "SimpleXML",
+                "XMLReader",
+                "iterator",
+                "xml"
+            ],
+            "time": "2018-02-14T04:55:02+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1107,6 +1153,61 @@
             "time": "2015-04-20T18:58:01+00:00"
         },
         {
+            "name": "jdavidbakr/replaceable-model",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jdavidbakr/replaceable-model.git",
+                "reference": "9773f0f1ec838a6a979e65ad703a41e17534f09e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jdavidbakr/replaceable-model/zipball/9773f0f1ec838a6a979e65ad703a41e17534f09e",
+                "reference": "9773f0f1ec838a6a979e65ad703a41e17534f09e",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.1",
+                "php": "~5.5|~7.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.0",
+                "phpunit/phpunit": "4.*",
+                "scrutinizer/ocular": "~1.1",
+                "squizlabs/php_codesniffer": "~2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "jdavidbakr\\ReplaceableModel\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "J David Baker",
+                    "email": "me@jdavidbaker.com",
+                    "homepage": "http://www.jdavidbaker.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Adds 'REPLACE' and 'INSERT IGNORE' query capability to eloquent models",
+            "homepage": "https://github.com/jdavidbakr/replaceable-model",
+            "keywords": [
+                "jdavidbakr",
+                "replaceable-model"
+            ],
+            "time": "2017-12-20T02:18:35+00:00"
+        },
+        {
             "name": "justinrainbow/json-schema",
             "version": "5.2.7",
             "source": {
@@ -1507,6 +1608,114 @@
             "time": "2018-04-16T12:10:37+00:00"
         },
         {
+            "name": "laravelcollective/html",
+            "version": "v5.4.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LaravelCollective/html.git",
+                "reference": "f04965dc688254f4c77f684ab0b42264f9eb9634"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/f04965dc688254f4c77f684ab0b42264f9eb9634",
+                "reference": "f04965dc688254f4c77f684ab0b42264f9eb9634",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "5.4.*",
+                "illuminate/routing": "5.4.*",
+                "illuminate/session": "5.4.*",
+                "illuminate/support": "5.4.*",
+                "illuminate/view": "5.4.*",
+                "php": ">=5.6.4"
+            },
+            "require-dev": {
+                "illuminate/database": "5.4.*",
+                "mockery/mockery": "~0.9.4",
+                "phpunit/phpunit": "~5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Collective\\Html\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                },
+                {
+                    "name": "Adam Engebretson",
+                    "email": "adam@laravelcollective.com"
+                }
+            ],
+            "description": "HTML and Form Builders for the Laravel Framework",
+            "homepage": "http://laravelcollective.com",
+            "time": "2017-08-12T15:52:38+00:00"
+        },
+        {
+            "name": "laravie/parser",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravie/parser.git",
+                "reference": "94c20f710d56ee352f6b012aa6a8de8e4452dbf3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravie/parser/zipball/94c20f710d56ee352f6b012aa6a8de8e4452dbf3",
+                "reference": "94c20f710d56ee352f6b012aa6a8de8e4452dbf3",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.1",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "phpunit/phpunit": "^5.7.26 || ^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravie\\Parser\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mior Muhammad Zaki",
+                    "email": "crynobone@gmail.com",
+                    "homepage": "https://github.com/crynobone"
+                }
+            ],
+            "description": "XML Document Parser for PHP",
+            "keywords": [
+                "parser",
+                "xml"
+            ],
+            "time": "2018-04-30T01:32:59+00:00"
+        },
+        {
             "name": "league/flysystem",
             "version": "1.0.45",
             "source": {
@@ -1810,6 +2019,62 @@
                 "php"
             ],
             "time": "2018-03-25T17:35:16+00:00"
+        },
+        {
+            "name": "orchestra/parser",
+            "version": "v3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orchestral/parser.git",
+                "reference": "e2c6ff7fca54c03bc08abd25c33a086454a4022b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orchestral/parser/zipball/e2c6ff7fca54c03bc08abd25c33a086454a4022b",
+                "reference": "e2c6ff7fca54c03bc08abd25c33a086454a4022b",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/container": "~5.4.0",
+                "laravie/parser": "~1.1",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "illuminate/support": "~5.4.0",
+                "mockery/mockery": "^0.9.4",
+                "phpunit/phpunit": "~4.8|~5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Orchestra\\Parser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mior Muhammad Zaki",
+                    "email": "crynobone@gmail.com",
+                    "homepage": "https://github.com/crynobone"
+                }
+            ],
+            "description": "XML Document Parser for Laravel and PHP",
+            "keywords": [
+                "laravel",
+                "orchestra-platform",
+                "orchestral",
+                "parser",
+                "xml"
+            ],
+            "time": "2017-01-26T02:02:38+00:00"
         },
         {
             "name": "paragonie/random_compat",

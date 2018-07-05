@@ -14,7 +14,7 @@ return [
         'add_default_role_on_register' => true,
         'default_role'                 => 'user',
         'namespace'                    => App\User::class,
-        'default_avatar'               => 'users/default.png',
+        'default_avatar'               => 'users/def.png',
         'redirect'                     => '/admin',
     ],
 
@@ -28,7 +28,8 @@ return [
     */
 
     'controllers' => [
-        'namespace' => 'TCG\\Voyager\\Http\\Controllers',
+//        'namespace' => 'TCG\\Voyager\\Http\\Controllers',
+          'namespace' => 'App\\Http\\Controllers\\Admin',
     ],
 
     /*
@@ -203,11 +204,11 @@ return [
 
     // Here you can specify additional assets you would like to be included in the master.blade
     'additional_css' => [
-        //'css/custom.css',
+        'css/admin.css',
     ],
 
     'additional_js' => [
-        //'js/custom.js',
+        'js/admin.js?v=7',
     ],
 
     'googlemaps' => [
