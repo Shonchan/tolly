@@ -119,7 +119,7 @@ class OrderController extends Controller
             $purchase->save();
         }
 
-        return view('order.show', compact(['order']));
+        return view('order.show', compact(['order']))->withCookie(\Cookie::forget('shopping_cart'));
 
 
     }
