@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Intervention\Image\Image;
 
 class Product extends Model
 {
@@ -45,6 +45,23 @@ class Product extends Model
         if($this->imgs == null)
             $this->imgs = json_decode($this->images);
         return $this->imgs[0];
+    }
+
+    public function imgSize($width=320, $height=200, $img){
+        if(empty($img))
+            $img = $this->img();
+
+
+        $resizePath = public_path();
+        $parts = explode('.', $img);
+        $filename = $parts[0].$width.'x'.$height.'.'.$parts[1];
+        if (file_exists($resizePath.$filename))
+            return url ('storage', $filename);
+
+        $image = \Image::make($resizePath.$img)->resize($width, $height);
+        $image->save($resizePath.$filename);
+        return url ('storage', $filename);
+
     }
 
     public function brand()

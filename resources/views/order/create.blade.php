@@ -30,12 +30,12 @@
             <div class="order-form">
 
                     <div class="form-group">
-                        <label for="">Имя*</label>
+                        <label for="">ФИО*</label>
                         <div class="control">
-                            <input name="name" type="text" class="form-control">
+                            <input name="name" type="text" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-group">
+                    {{--<div class="form-group">
                         <label for="">Фамилия*</label>
                         <div class="control">
                             <input  name="lastname" type="text" class="form-control">
@@ -46,9 +46,9 @@
                         <div class="control">
                             <input name="midname" type="text" class="form-control">
                         </div>
-                    </div>
+                    </div>--}}
                     <div class="form-group">
-                        <label for="">E-mail*</label>
+                        <label for="">E-mail</label>
                         <div class="control">
                             <input  name="email" type="text" class="form-control">
                         </div>
@@ -56,25 +56,25 @@
                     <div class="form-group">
                         <label for="">Телефон*</label>
                         <div class="control">
-                            <input  name="phone" type="text" class="form-control">
+                            <input  name="phone" type="text" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="">Доп. телефон</label>
-                        <div class="control">
-                            <input  name="addphone" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Город</label>
-                        <div class="control">
-                            <div class="form-location">
-                                <div class="location">
-                                    <div class="location-button">Москва</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {{--<div class="form-group">--}}
+                        {{--<label for="">Доп. телефон</label>--}}
+                        {{--<div class="control">--}}
+                            {{--<input  name="addphone" type="text" class="form-control">--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="form-group">--}}
+                        {{--<label for="">Город</label>--}}
+                        {{--<div class="control">--}}
+                            {{--<div class="form-location">--}}
+                                {{--<div class="location">--}}
+                                    {{--<div class="location-button">Москва</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
                     <div class="js-tabs">
                         <div class="form-group">
                             <label for="">Тип доставки</label>
@@ -110,11 +110,11 @@
                             <label for="">Способ доставки</label>
                             <div class="control">
                                 <select name="delivery_method_id" class="select">
-                                    <option value="1">Вариант доставки 1</option>
-                                    <option value="2">Вариант доставки 2</option>
-                                    <option value="3">Вариант доставки 3</option>
-                                    <option value="4">Вариант доставки 4</option>
-                                    <option value="5">Вариант доставки 5</option>
+
+                                        @foreach ($del_methods as $del)
+                                            <option value="{{ $del->id }}">{{ $del->name }}</option>
+                                        @endforeach
+
                                 </select>
                             </div>
                         </div>
@@ -122,11 +122,10 @@
                             <label for="">Тип оплаты</label>
                             <div class="control">
                                 <select name="payment_method_id">
-                                    <option value="1">Тип оплаты 1</option>
-                                    <option value="2">Тип оплаты 2</option>
-                                    <option value="3">Тип оплаты 3</option>
-                                    <option value="4">Тип оплаты 4</option>
-                                    <option value="5">Тип оплаты 5</option>
+                                    @foreach ($pay_methods as $pay)
+                                        <option value="{{ $pay->id }}">{{ $pay->name }}</option>
+                                    @endforeach
+
                                 </select>
                             </div>
                         </div>

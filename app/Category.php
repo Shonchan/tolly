@@ -12,7 +12,7 @@ class Category extends Model
     }
 
     public function getChilds(){
-        return $this->hasMany('App\Category', 'parent_id', 'id');
+        return $this->hasMany('App\Category', 'parent_id', 'id')->where('enabled', '=', 1);
     }
 
     public function parent(){

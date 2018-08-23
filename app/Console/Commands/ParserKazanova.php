@@ -91,11 +91,10 @@ class ParserKazanova extends Command
         // 1.Постельное белье
         'model'=>[1,15,23,32,39,48,54,61,67],
         'Размер для сайта'=>[2,16,25,34,41,49,55,62,68],
-        'Комплектация для сайта'=>[3],
+        'Комплектация для сайта'=>[3,43],
         'Материал для сайта'=>[7,17,26,35,42,50,56,63,69],
         'Состав для сайта'=>[8],
         'Наполнитель'=>[18,28],
-        'Комплектация для сайта'=>[43],
         'Цвет для сайта'=>[9,20,29,36,45,51,58,64,70],
 
     ];
@@ -159,7 +158,7 @@ class ParserKazanova extends Command
             }
             $xml->id = (int) preg_replace("/\D/", "", $attributes->{"id"});
             if(isset($this->categories[(int)$xml->categoryId]) && (int)$xml->quantity > 1) {
-//                $this->info($xml->model);
+
                 $this->items[] = $xml;
             }
 
@@ -169,7 +168,7 @@ class ParserKazanova extends Command
         $reader->parse();
         $reader->close();
 
-//        $this->info(count($this->items));
+
 
         foreach ($this->items as $k=>$item) {
             $item = (array)$item;
@@ -183,7 +182,7 @@ class ParserKazanova extends Command
 
             if(isset($this->categories[$it['category']])) {
                 $this->import_item($it);
-//                exit();
+
             }
 
         }
@@ -192,7 +191,7 @@ class ParserKazanova extends Command
 
     protected function import_item($item)
     {
-//        global $simpla, $defNames, $sn, $column_names, $categories, $cat_features, $cat_limit, $provider_id;
+
         $imported_item = new \stdClass;
 
         // Проверим не пустое ли название и артинкул (должно быть хоть что-то из них)
@@ -205,7 +204,7 @@ class ParserKazanova extends Command
         $shortName = $this->sn[$cat_id];
 
         // Подготовим товар для добавления в базу
-//        $product = array();
+
 
         if(isset($item['sku'])) {
             $variant = Variant::where('sku', '=', trim($item['sku']))->first();
@@ -235,7 +234,7 @@ class ParserKazanova extends Command
             $brand_url = $this->translit(trim($item['brand']));
 
             $brand = Brand::firstOrCreate(['name'=>$item['brand']], ['slug'=>$brand_url]);
-//
+
             $product->brand_id = $brand->id;
         }
 
@@ -312,7 +311,7 @@ class ParserKazanova extends Command
             $variant->product_id = $product->id;
             $variant->external_id = str_pad($product->id, 7, "0", STR_PAD_LEFT);
 
-//            dd($variant);
+
             $variant->save();
             $variant_id = $variant->id;
             $imported_item->status = 'added';
@@ -327,14 +326,7 @@ class ParserKazanova extends Command
                 $product->categories()->sync( $categories_ids );
 
             }
-                /*foreach($categories_ids as $c_id) {
 
-                    \DB::insert(DB::raw('INSERT IGNORE INTO products_categories SET product_id= :pid, category_id= :cid,'), [
-                        'pid'=>$product_id,
-                        'cid'=>$c_id,
-                    ]);
-                }*/
-//
 
 
             // Изображения товаров
@@ -360,13 +352,7 @@ class ParserKazanova extends Command
 
                         copy($image, \Storage::disk('public')->path($path.$filename));
                         $imgs[] = $path.$filename;
-                        // Добавляем изображение только если такого еще нет в этом товаре
-//                        $simpla->db->query('SELECT filename FROM __images WHERE product_id=? AND (filename=? OR filename=?) LIMIT 1', $product_id, $image_filename, $image);
-//                        if(!$simpla->db->result('filename'))
-//                        {
-//                            $simpla->products->add_image($product_id, $image);
-//                            $simpla->image->download_image($image);
-//                        }
+
 
 
 
@@ -387,9 +373,7 @@ class ParserKazanova extends Command
                 {
                     if(in_array($feature_id, $this->cat_features[$category_id]))
                     {
-                        // $this->db->query('SELECT f.id FROM __features f WHERE f.name=? LIMIT 1', $feature_name);
-                        // if(!$feature_id = $this->db->result('id'))
-                        //  $feature_id = $this->features->add_feature(array('name'=>$feature_name));
+
                         Option::replace([
                                 'product_id'=> (int)$product_id,
                                 'feature_id'=>(int)$feature_id,
@@ -401,8 +385,7 @@ class ParserKazanova extends Command
 //                            'val'=>$feature_value,
 //                        ]);
 
-//                        $simpla->features->add_feature_category((int)$feature_id, (int)$category_id);
-//                        $simpla->features->update_option((int)$product_id, (int)$feature_id, $feature_value);
+
                     }
 
                 }
@@ -459,7 +442,7 @@ class ParserKazanova extends Command
 
     protected function convert_item($item)
     {
-//        global $column_names,$features, $categories, $cat_features;
+
         $result = [];
         foreach ($item as $key => $value) {
             if(isset($this->column_names[$key]))

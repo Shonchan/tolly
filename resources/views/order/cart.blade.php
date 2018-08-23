@@ -20,13 +20,14 @@
     <div class="basket">
         {!! Form::open(['action' => 'Views\OrderController@create', 'method' => 'post']) !!}
         <h1>Корзина</h1>
+        @if (isset($variants) && count($variants)>0)
         <div class="basket-content">
             <div class="basket-head">
                 <div class="basket-name">Товар</div>
                 <div class="basket-price">Цена</div>
                 <div class="basket-cost">Количество</div>
                 <div class="basket-total">Сумма</div>
-            </div> @if ($cart)
+            </div>
 
                     @foreach ($variants as $v)
                         <div class="basket-item">
@@ -51,10 +52,8 @@
 
                     @endforeach
 
-                <h3>Итого: {{ $total." руб." }}</h3>
-            @else
-                В корзине нет товаров
-            @endif
+
+
 
         </div>
         <div class="basket-complete">
@@ -62,16 +61,16 @@
                 <div class="basket-col">
                     <ul class="basket-box">
                         <li>
-                            <span>Всего 9 товаров на сумму</span>
+                            <span>Всего <amount>{{ $cart_total }}</amount> товаров на сумму</span>
                             <b>{{ $total." руб." }}</b>
                         </li>
-                        <li>
+                        <li class="discount">
                             <span>Все скидки</span>
-                            <b>-1 941 руб.</b>
+                            <b>-0 руб.</b>
                         </li>
                         <li class="total">
                             <span>Итого</span>
-                            <b>55 979 руб.</b>
+                            <b>{{ $total." руб." }}</b>
                         </li>
                     </ul>
                 </div>
@@ -81,6 +80,13 @@
             </div>
         </div>
         {!! Form::close() !!}
+        @else
+            <div class="basket-blank">
+                <h2>В&nbsp;вашей корзине пусто? Это не&nbsp;страшно!</h2>
+                <p>Если Вы&nbsp;зарегистрированы у&nbsp;нас на&nbsp;сайте и&nbsp;в&nbsp;вашей корзине были товары, то&nbsp;чтобы их&nbsp;увидеть необходимо авторизоваться</p>
+                <p><a href="{{ url('') }}" class="btn btn1">ПЕРЕЙТИ К&nbsp;ПОКУПКАМ</a></p>
+            </div>
+        @endif
     </div>
 
 

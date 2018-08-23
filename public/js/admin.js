@@ -68,9 +68,46 @@
 /***/ "./resources/assets/js/admin.js":
 /***/ (function(module, exports) {
 
-$('#add-variant').click(function () {
-   alert('test');
-});
+// $('#add-variant').click(function () {
+//    alert('test');
+// });
+        $('select[name="category_id"]').change(function () {
+            $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type:"POST",
+                    url:"/ajax/filter",
+                    data:{'id':this.value},
+                    dataType:"json",
+                    //beforeSend:function(){ $('#ul_pro').html('<div class="load"></div>'); },
+                    success:function(data){
+                        $('#filter').append(data);
+
+                    }
+                });
+        });
+
+        // $('#refresh_filter').click(function (e) {
+        //     e.preventDefault();
+        //     var filter = $('#filter').serializeArray();
+        //     $('textarea[name="filter"]').val(filter);
+        //     // alert(cat_id);
+        //     // $.ajax({
+        //     //     headers: {
+        //     //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     //     },
+        //     //     type:"POST",
+        //     //     url:"/ajax/products",
+        //     //     data:{'id':cat_id},
+        //     //     dataType:"json",
+        //     //     //beforeSend:function(){ $('#ul_pro').html('<div class="load"></div>'); },
+        //     //     success:function(data){
+        //     //         $('.product div.row').append(data.offers);
+        //     //         scrto = 1;
+        //     //     }
+        //     // });
+        // });
 
 /***/ }),
 

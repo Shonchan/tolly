@@ -36,11 +36,11 @@
                 <div class="product-sorting">
                     <div class="product-sorting-name">Сортировать&nbsp;по</div>
                     <div class="product-sorting-control">
-                        <select>
-                            <option value="1">популярности</option>
-                            <option value="2">цене</option>
-                            <option value="3">скидке</option>
-                            <option value="4">рейтингу</option>
+                        <select id="sort">
+                            <option value="popular">популярности</option>
+                            <option value="price">цене</option>
+                            <option value="discount">скидке</option>
+                            <option value="rating">рейтингу</option>
                         </select>
                     </div>
                 </div>
@@ -58,26 +58,28 @@
                 </div>
             </div>
             <div class="row">
-                @foreach($category->products as $p)
-                    <div class="post" itemscope itemtype="http://schema.org/Product">
+                @foreach($products as $p)
+                    <div data-page="{{ $page }}" class="post" itemscope itemtype="http://schema.org/Product">
                         <div class="pc">
-                            <div class="pc-image"><a href="{{ url('/products', $p->slug) }}"><img src="{{ url('storage', $p->img()) }}" alt="" itemprop="image"></a></div>
+                            <div class="pc-image"><a href="{{ url('/products', $p->slug) }}"><img src="{{  $p->img }}" alt="" itemprop="image"></a></div>
                             <div class="pc-name"><a href="{{ url('/products', $p->slug) }}" itemprop="name">{{ $p->name }}</a></div>
                             <meta content="{{ $p->name }}" itemprop="description">
                             <div class="pc-content" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-                                <div class="pc-price"><span itemprop="price">{{ $p->variant()->price }}</span> руб. <meta content="RUB" itemprop="priceCurrency"></div>
+                                <div class="pc-price"><span itemprop="price">{{ $p->price }}</span> руб. <meta content="RUB" itemprop="priceCurrency"></div>
                             </div>
                         </div>
                     </div>
                 @endforeach
-                    <div class="pagination">
-                        <ul role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
-                            <li class="current"><a itemprop="url" href="javascript:;"><span itemprop="name">1</span></a></li>
-                            <li><a itemprop="url" href="javascript:;"><span itemprop="name">2</span></a></li>
-                            <li><a itemprop="url" href="javascript:;"><span itemprop="name">3</span></a></li>
-                            <li><a itemprop="url" href="javascript:;"><span itemprop="name">&raquo;</span></a></li>
-                        </ul>
-                    </div>
+
+{{--                {{ $products->links() }}--}}
+                    {{--<div class="pagination">--}}
+                        {{--<ul role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">--}}
+                            {{--<li class="current"><a itemprop="url" href="javascript:;"><span itemprop="name">1</span></a></li>--}}
+                            {{--<li><a itemprop="url" href="javascript:;"><span itemprop="name">2</span></a></li>--}}
+                            {{--<li><a itemprop="url" href="javascript:;"><span itemprop="name">3</span></a></li>--}}
+                            {{--<li><a itemprop="url" href="javascript:;"><span itemprop="name">&raquo;</span></a></li>--}}
+                        {{--</ul>--}}
+                    {{--</div>--}}
             </div>
 
 

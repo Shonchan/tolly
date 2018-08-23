@@ -16,7 +16,7 @@
 
         <li itemprop="child" itemscope itemtype="http://data-vocabulary.org/Breadcrumb" id="breadcrumb-1" itemref="breadcrumb-2">
             <a {{ url($product->slug) }} itemprop="url"><span itemprop="title">{{ $product->name }}</span></a>
-        </li>
+        </li>.
     </ul>
 @endsection
 
@@ -33,11 +33,14 @@
                     @endforeach
 
                 </div>
+                @if(count($product->images)>1)
                 <div class="single-thumbnails">
                     @foreach ($product->images as $i)
                         <a href="javascript:;" data-slide-index="{{ $loop->index }}"><img class="sp-thumbnail" src="{{ url('storage', $i) }}"></a>
                     @endforeach
                 </div>
+                @endif
+
             </div>
             <div class="single-content">
                 <div class="single-fixed">
@@ -56,7 +59,7 @@
                     </div>
                     <ul class="single-option">
                         <li><b>В наличии:</b> <span>{{ $product->variant()->stock }} шт.</span></li>
-                        <li><b>Код товара:</b> <span>{{ $product->variant()->sku }}</span></li>
+                        <li><b>Код товара:</b> <span>{{ $product->variant()->external_id }}</span></li>
                     </ul>
                     <ul class="single-price">
                         @if($product->variant()->compare_price)<li>Цена <span class="old">{{ $product->variant()->compare_price }} руб.</span> <span class="discount">-{{ 100-round($product->variant()->price/$product->variant()->compare_price*100)  }}%</span></li>@endif
@@ -98,6 +101,12 @@
                                 <span>Производитель</span>
                                 <b>{{ $product->brand->name }}</b>
                             </li>
+                            @foreach ($options as $o)
+                                <li>
+                                    <span>{{ $o->name }}</span>
+                                    <b>{{ $o->value }}</b>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                     <div class="single-block js-tabs-body" data-id="block2">

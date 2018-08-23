@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Category;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
             }
         }
         \View::share('cart_total', $cart_total);
+        $categories = Category::where('parent_id', '=', 0)
+            ->where('enabled', '=', 1)->get();
+        \View::share('cats', $categories);
     }
 
     /**

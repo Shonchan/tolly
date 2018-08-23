@@ -1,6 +1,6 @@
 <div class="head">
     <div class="navbar-mobile"><span></span></div>
-    <div class="navbar-mobile-basket"><a href="javascript:;"><span>99</span></a></div>
+    <div class="navbar-mobile-basket"><a href="{{ url('cart') }}"><span>{{ $cart_total }}</span></a></div>
     <div class="navbar">
         <div class="navbar-logo"><a href="{{ url('/') }}"><img src="{{ url('/storage/logo.png') }}" /></a></div>
         <div class="navbar-menu">
@@ -117,30 +117,19 @@
             </div>
         </div>
         <ul class="nav">
-            <li class="nav-item nav-item_sub">
-                <a href="javascript:;">Постельное белье</a>
-                <ul class="nav-child">
-                    <li><a href="javascript:;">Название подраздела 01</a></li>
-                    <li><a href="javascript:;">Название подраздела 02</a></li>
-                    <li><a href="javascript:;">Название подраздела 03</a></li>
-                    <li><a href="javascript:;">Название подраздела 04</a></li>
-                    <li><a href="javascript:;">Название подраздела 05</a></li>
-                </ul>
-            </li>
-            <li class="nav-item nav-item_sub">
-                <a href="javascript:;">Подушки</a>
-                <ul class="nav-child">
-                    <li><a href="javascript:;">Заголовок второго уровня 01</a></li>
-                    <li><a href="javascript:;">Заголовок второго уровня 02</a></li>
-                    <li><a href="javascript:;">Заголовок второго уровня 03</a></li>
-                </ul>
-            </li>
-            <li class="nav-item"><a href="javascript:;">Одеяла</a></li>
-            <li class="nav-item"><a href="javascript:;">Пледы</a></li>
-            <li class="nav-item"><a href="javascript:;">Покрывала</a></li>
-            <li class="nav-item"><a href="javascript:;">Пледы</a></li>
-            <li class="nav-item"><a href="javascript:;">Покрывала</a></li>
-            <li class="nav-item"><a href="javascript:;">Аксессуары</a></li>
+            @foreach($cats as $c)
+                <li class="nav-item nav-item_sub">
+                    <a href="{{ url($c->slug) }}">{{ $c->name }}</a>
+                    <ul class="nav-child">
+                        @foreach($c->getChilds as $ch)
+                            @if($ch->enabled)
+                            <li><a href="{{ url($ch->slug) }}">{{ $ch->name }}</a></li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </li>
+            @endforeach
+
         </ul>
     </nav>
 </div>

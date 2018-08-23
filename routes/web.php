@@ -22,7 +22,11 @@ Route::middleware('guest')->group(function () {
     Route::post('/order', 'Views\OrderController@create')->name('createOrder');
     Route::post('/order/success', 'Views\OrderController@store');
     Route::get('/order/{hash}', 'Views\OrderController@show');
+    Route::post('/ajax/products', 'Views\ProductController@showMore');
+    Route::post('/ajax/filter', 'Views\ProductController@filter');
     Route::get( '/{url}', 'Views\ProductController@index' )->name( 'category' );
+    Route::get( '/{url}/page-{page}', 'Views\ProductController@index' )->name( 'category' );
+
 //    Route::get( '/{url}', 'Views\PagesController@show' )->name( 'page' );
 });
 

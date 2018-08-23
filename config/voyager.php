@@ -208,7 +208,7 @@ return [
     ],
 
     'additional_js' => [
-        'js/admin.js?v=7',
+        'js/admin.js?v=13',
     ],
 
     'googlemaps' => [

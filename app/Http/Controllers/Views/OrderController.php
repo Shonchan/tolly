@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Views;
 
 use App\Delivery;
 use App\Order;
+use App\PaymentMethod;
 use App\Purchase;
 use App\Variant;
 use Illuminate\Http\Request;
@@ -53,16 +54,17 @@ class OrderController extends Controller
            $variants[$v]->amount = $purchases['amount'][$k];
        }
 
-        return view('order.create', compact(['variants', 'total_amount', 'total_sum']));
+       $pay_methods = PaymentMethod::all();
+       $del_methods = Delivery::all();
+
+        return view('order.create', compact(['variants', 'total_amount', 'total_sum', 'pay_methods', 'del_methods']));
     }
 
     public function store(Request $request)
     {
         $validator = \Validator::make($request->all(), [
             'name' => 'required',
-            'lastname' => 'required',
-            'midname' => 'required',
-            'email' => 'required',
+
             'phone' => 'required',
         ]);
 
@@ -76,8 +78,8 @@ class OrderController extends Controller
 
         $data = $request->all();
         $order = new Order();
-        $order->name = implode(' ', [$data['name'], $data['midname'], $data['lastname']]);
-        $order->address  = implode(' ', array_values($data['address']));
+        $order->name = $data['name'];
+        $order->address  = $data['address'];
         $order->phone = $data['phone'];
         $order->email = $data['email'];
         $order->comment = $data['comment'];
@@ -142,13 +144,17 @@ class OrderController extends Controller
         }
 
         $v_id = $request->get('variant_id');
+        $cook = \Cookie::get('shopping_cart');
 
-        if(isset($_COOKIE['shopping_cart'])) {
-            $cart = json_decode( $_COOKIE[ 'shopping_cart' ] );
-            if(isset($cart[$v_id])){
-                $cart[$v_id] += 1;
+        if(!empty($cook)) {
+            $cart = json_decode( $cook );
+
+
+//            \Debugbar::info($cart);
+            if(isset($cart->$v_id)){
+                $cart->$v_id += 1;
             } else {
-                $cart[$v_id] = 1;
+                $cart->$v_id = 1;
             }
         } else {
             $cart = [];
@@ -157,7 +163,7 @@ class OrderController extends Controller
         }
 
 
-        return redirect('/cart')->withCookie(cookie('shopping_cart', json_encode($cart), 30*24*60, '/'));
+        return redirect('/cart')->withCookie(cookie('shopping_cart', json_encode($cart), 30*24*60, '/', '', false, false));
 
     }
 }
