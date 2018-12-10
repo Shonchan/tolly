@@ -1,2 +1,6 @@
 User-agent: *
-Disallow:
+Disallow: /cart
+Disallow: /order
+Disallow: /ajax
+Disallow: /search*
+Sitemap: https://tolly.ru/sitemap.xml

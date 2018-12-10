@@ -14,6 +14,20 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\ParserKazanova::class,
+        Commands\ParserKarna::class,
+        Commands\ParserValteri::class,
+        Commands\ParserAlvitek::class,
+        Commands\ParserAlvitek2::class,
+        Commands\UpdateAlvitek::class,
+        Commands\UpdateKazanova::class,
+        Commands\UpdateValteri::class,
+        Commands\UpdateKarna::class,
+        Commands\CalculatePopularity::class,
+        Commands\CalculateRating::class,
+        Commands\MarketProductFeed::class,
+        Commands\GoogleProductFeed::class,
+        Commands\OrdersStatusCheck::class,
+        Commands\ExportProperties::class,
     ];
 
     /**
@@ -24,8 +38,25 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('calc:popularity')
+                  ->hourly();
+        $schedule->command('market:feed')
+            ->hourly();
+        $schedule->command('google:feed')
+            ->hourly();
+        $schedule->command('update:alvitek')
+            ->hourly();
+        $schedule->command('update:valteri')
+            ->hourly();
+        $schedule->command('update:karna')
+            ->hourly();
+        $schedule->command('update:kazanova')
+            ->hourly();
+
+        $schedule->command('parser:kazanova')->daily();
+        $schedule->command('parser:valteri')->daily();
+        $schedule->command('parser:karna')->daily();
+        $schedule->command('parser:alvitek2')->daily();
     }
 
     /**

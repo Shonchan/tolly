@@ -1,8 +1,10 @@
 <div class="carousel">
-    <div class="js-carousel">
-        <div class="carousel-item" style="background-image: url('{{ url('storage/3.jpg') }}')"></div>
-        <div class="carousel-item" style="background-image: url('{{ url('storage/4.jpg') }}')"></div>
-        <div class="carousel-item" style="background-image: url('{{ url('storage/3.jpg') }}')"></div>
-        <div class="carousel-item" style="background-image: url('{{ url('storage/4.jpg') }}')"></div>
+    <div class="swiper-container js-carousel">
+        @foreach ($banners as $banner)
+        <a class="swiper-slide" href="{{$banner->link}}">
+            <img src="{{ url('/storage', $banner->image) }}" alt="" />
+        </a>
+        @endforeach
     </div>
+    <div class="carousel-pagination"></div>
 </div>

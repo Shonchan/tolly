@@ -204,11 +204,13 @@ return [
 
     // Here you can specify additional assets you would like to be included in the master.blade
     'additional_css' => [
+        'css/fancybox.css',
         'css/admin.css',
     ],
 
     'additional_js' => [
-        'js/admin.js?v=13',
+        'js/jquery.fancybox.min.js',
+        'js/admin.js?v=76',
     ],
 
     'googlemaps' => [

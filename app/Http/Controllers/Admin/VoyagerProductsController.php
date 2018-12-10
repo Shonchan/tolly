@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Option;
 use App\Variant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -45,9 +46,34 @@ class VoyagerProductsController extends VoyagerBaseController
         }
 
         $variants = \DB::table('variants')->where('product_id', '=', $dataTypeContent->id)->get();
-//        \Debugbar::info($dataTypeContent->id);
+        foreach ($variants as &$v) {
+            $vf = \DB::table('options')->where('variant_id', '=', $v->id)->pluck('value', 'feature_id')->toArray();
+//            \Debugbar::info($vf);
+            $v->feats = json_encode($vf);
+        }
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'variants'));
+        $features = \DB::table('features')->where('category_id', '=', $dataTypeContent->categories[0]->id)->get();
+        $opts = \DB::table('options as o')
+            ->leftJoin('features as f', 'f.id', '=', 'o.feature_id')
+            ->selectRaw('f.id as feature_id, o.value')
+            ->whereIn('o.product_id', (array)$dataTypeContent->id)
+//            ->where('o.variant_id', '=', 0)
+            ->orderBy('f.position', 'asc')->get();
+        $p_options = [];
+        foreach ($opts as $o){
+            if (isset($p_options[$o->feature_id])) {
+                $p_options[ $o->feature_id ][] = $o->value;
+            } else {
+                $p_options[ $o->feature_id ] = [];
+                $p_options[ $o->feature_id ][] = $o->value;
+            }
+        }
+
+        $var_feats = \DB::table('variant_features')->where('product_id', '=', $dataTypeContent->id)->pluck('feature_id')->toArray();
+//        dd($options);
+        \Debugbar::info($var_feats);
+
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'variants', 'features', 'p_options', 'var_feats'));
     }
 
     public function update(Request $request, $id)
@@ -78,16 +104,75 @@ class VoyagerProductsController extends VoyagerBaseController
 
 
         $vids = [];
+        $features = $request->features;
+        $var_feats = $request->var_feats;
+
+        \DB::table('variant_features')->where('product_id', '=', $id)->delete();
+        $vfa = [];
+        foreach ($var_feats as $vf) {
+            if(!empty($vf))
+                $vfa[] = ['product_id'=>$id, 'feature_id'=>$vf];
+        }
+        \DB::table('variant_features')->insert($vfa);
+//        \DB::table('options')->where('product_id', '=', $id)->whereIn('feature_id', $var_feats)->delete();
+
+        $voids = [];
         foreach ($variants as &$v) {
             $vid = isset($v['id']) ? $v['id'] : '';
             $v['product_id'] = $id;
-            $vid = Variant::updateOrCreate(['sku'=>$v['sku'], 'product_id'=>$v['product_id']], $v);
-            $vids[] = $vid->id;
+            if(trim($v['sku']) != '') {
+                $feats = json_decode($v['feats'], true);
+                unset($v['feats']);
+                $vid = Variant::updateOrCreate( [ 'sku' => $v[ 'sku' ], 'product_id' => $v[ 'product_id' ] ], $v );
+                $vid->external_id = str_pad($vid->id, 7, "0", STR_PAD_LEFT);
+                $vid->save();
+                $vids[] = $vid->id;
+
+                foreach ($feats as $fid=>$valu) {
+                    if(in_array($fid, $var_feats)) {
+                        $oid = Option::updateOrCreate( [
+//                        'product_id'=> (int)$id,
+                            'variant_id' => (int)$vid->id,
+                            'feature_id' => (int)$fid,
+                            'value' => $valu,
+                        ], [
+//                        'product_id'=> (int)$id,
+                            'variant_id' => (int)$vid->id,
+                            'feature_id' => (int)$fid,
+                            'value' => $valu,
+                        ] );
+                        $voids[] = $oid->id;
+                    }
+                }
+
+            }
         }
 
+//        \Debugbar::info($features);
+        \DB::table('options')->whereNotIn('id', $voids)->whereIn('variant_id', $vids)->delete();
 
         \DB::table('variants')->whereNotIn('id', $vids)->where('product_id', '=', $id)->delete();
 
+
+        $oids = [];
+        foreach ( $features as $fid => $vals ) {
+            foreach ( $vals as $vl ) {
+                if(trim($vl) != '') {
+                    $oid = Option::updateOrCreate([
+                        'product_id'=> (int)$id,
+                        'feature_id'=>(int)$fid,
+                        'value'=>$vl,
+                    ], [
+                        'product_id'=> (int)$id,
+                        'feature_id'=>(int)$fid,
+                        'value'=>$vl,
+                        ]);
+                    $oids[] = $oid->id;
+                }
+            }
+        }
+
+        \DB::table('options')->whereNotIn('id', $oids)->where('product_id', '=', $id)->delete();
 
 
         if ($val->fails()) {
@@ -100,7 +185,7 @@ class VoyagerProductsController extends VoyagerBaseController
             event(new BreadDataUpdated($dataType, $data));
 
             return redirect()
-                ->route("voyager.{$dataType->slug}.index")
+                ->route("voyager.{$dataType->slug}.edit", $id)
                 ->with([
                     'message'    => __('voyager::generic.successfully_updated')." {$dataType->display_name_singular}",
                     'alert-type' => 'success',
@@ -192,7 +277,9 @@ class VoyagerProductsController extends VoyagerBaseController
             foreach ($variants as &$v) {
                // $vid = isset($v['id']) ? $v['id'] : '';
                 $v['product_id'] = $data->id;
-                Variant::updateOrCreate(['sku'=>$v['sku'], 'product_id'=>$v['product_id']], $v);
+                $vid = Variant::updateOrCreate(['sku'=>$v['sku'], 'product_id'=>$v['product_id']], $v);
+                $vid->external_id = str_pad($vid->id, 7, "0", STR_PAD_LEFT);
+                $vid->save();
 
             }
 
@@ -210,5 +297,82 @@ class VoyagerProductsController extends VoyagerBaseController
                     'alert-type' => 'success',
                 ]);
         }
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        $slug = $this->getSlug($request);
+
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+        // Check permission
+        $this->authorize('delete', app($dataType->model_name));
+
+        // Init array of IDs
+        $ids = [];
+        if (empty($id)) {
+            // Bulk delete, get IDs from POST
+            $ids = explode(',', $request->ids);
+        } else {
+            // Single item delete, get ID from URL
+            $ids[] = $id;
+        }
+        foreach ($ids as $id) {
+            $data = call_user_func([$dataType->model_name, 'findOrFail'], $id);
+            $this->cleanup($dataType, $data);
+        }
+
+        $displayName = count($ids) > 1 ? $dataType->display_name_plural : $dataType->display_name_singular;
+
+        $res = $data->destroy($ids);
+        $data = $res
+            ? [
+                'message'    => __('voyager::generic.successfully_deleted')." {$displayName}",
+                'alert-type' => 'success',
+            ]
+            : [
+                'message'    => __('voyager::generic.error_deleting')." {$displayName}",
+                'alert-type' => 'error',
+            ];
+
+        if ($res) {
+            event(new BreadDataDeleted($dataType, $data));
+        }
+
+        return redirect()->route("voyager.{$dataType->slug}.index")->with($data);
+    }
+
+    public function variant_features(Request $request)
+    {
+//        if($request->has('id')) {
+//            $variant = \DB::table('variants as v')->join('products_categories as pc', 'v.product_id', '=', 'pc.product_id')
+//                ->select('v.id', 'v.feats', 'pc.category_id')->where('v.id', '=', $request->get('id'))->first();
+//
+//        }
+        if($request->has('feats')) {
+            $feats = json_decode($request->get('feats'), true);
+
+        } else {
+            $feats = [];
+        }
+
+        if($request->has('vfeats')) {
+            $vf = [];
+            foreach ( $request->get('vfeats') as $f ) {
+                if(!empty($f['value']))
+                    $vf[]=$f['value'];
+            }
+            $features = \DB::table('features')->whereIn('id', $vf)->get();
+        } else {
+            $features = [];
+        }
+
+//        \Debugbar::info($vf);
+
+
+//        $features = \DB::table('features')->where('category_id', '=', $variant->category_id)->get();
+        $view = \View::make('ajax.variant_features', compact(['feats', 'features']))->render();
+
+        return response()->json($view);
     }
 }

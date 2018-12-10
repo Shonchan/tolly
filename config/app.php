@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Europe/Moscow',
 
     /*
     |--------------------------------------------------------------------------
@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ru',
 
     /*
     |--------------------------------------------------------------------------
@@ -181,10 +181,16 @@ return [
         TCG\Voyager\VoyagerServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Orchestra\Parser\XmlServiceProvider::class,
+        Riverskies\Laravel\MobileDetect\MobileDetectServiceProvider::class,
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
-
+        
+        //Banners 
+        App\Providers\BannerServiceProvider::class,
+        
+        //Sphinx
+        Fobia\Database\SphinxConnection\SphinxServiceProvider::class,
 
     ],
 

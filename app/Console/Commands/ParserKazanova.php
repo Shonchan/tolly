@@ -36,31 +36,36 @@ class ParserKazanova extends Command
     protected $provider_id = 2;
 
     protected $categories = [
-        1571=>1,1572=>1,1573=>1,1624=>1,1625=>1,1638=>1,1682=>1,1710=>1,1711=>1,1758=>1,1778=>1,1779=>1,1780=>1,1783=>1,1786=>1,1787=>1,1788=>1,1883=>1,1884=>1,1885=>1,1833=>1,1834=>1,1835=>1,1841=>1,1842=>1,1844=>1,1878=>1,1879=>1,1880=>1,1871=>1,1873=>1,1874=>1,1914=>1,1915=>1,1916=>1,1917=>1,1918=>1,1919=>1,2308=>1,2309=>1,
-        1454=>2,1599=>2,1888=>2,1889=>2,
-        1575=>3,1577=>3,1909=>3,
-        1448=>4,1740=>4,1741=>4,1742=>4,1846=>4,1847=>4,1894=>4,
-        1602=>5,1769=>5,1770=>5,1869=>5,1830=>5,
-        1420=>8,1689=>8,
-        1837=>14,1838=>14,
-        // 1903=>12,
+        2707=>1,2803=>1,2804=>1,2805=>1,2806=>1,2838=>1,2839=>1,2708=>1,2834=>1,2835=>1,2836=>1,2837=>1,2709=>1,2710=>1,2711=>1,2712=>1,2713=>1,2714=>1,2715=>1,2796=>1,2816=>1,2716=>1,2717=>1,2718=>1,2719=>1,2720=>1,2721=>1,2722=>1,2723=>1,2724=>1,2725=>1,2726=>1,2727=>1,2728=>1,2729=>1,2730=>1,2792=>1,2793=>1,2807=>1,2794=>1,2801=>1,2802=>1,2787=>1,2812=>1,2813=>1,2814=>1,2818=>1,2821=>1,2819=>1,2820=>1,2731=>1,2732=>1,2733=>1,2734=>1,2735=>1,2736=>1,2737=>1,2738=>1,2739=>1,2740=>1,2741=>1,2742=>1,2743=>1,2744=>1,2745=>1,2746=>1,2747=>1,2748=>1,2749=>1,2750=>1,2751=>1,2830=>1,2752=>1,2753=>1,2754=>1,2755=>1,2756=>1,2757=>1,2758=>1,
+        2688=>2,2689=>2,2690=>2,2691=>2,2692=>2,2693=>2,2823=>2,
+        2851=>3,2952=>3,2667=>3,2668=>3,2669=>3,
+        2670=>4,2671=>4,2672=>4,2673=>4,2674=>4,2675=>4,2676=>4,2677=>4,2678=>4,2679=>4,2680=>4,2681=>4,2682=>4,2683=>4,2684=>4,2685=>4,2686=>4,2687=>4,2840=>4,
+        2694=>5,2811=>5,2832=>5,2797=>5,2831=>5,2695=>5,2696=>5,2697=>5,2698=>5,2699=>5,2700=>5,2701=>5,2702=>5,2703=>5,2704=>5,2705=>5,2706=>5,
+        2648=>8,2649=>8,2650=>8,2651=>8,
+//        2653=>11,2654=>11,2655=>11,2656=>11,2657=>11,
+        2652=>12,
+        2780=>15,2795=>15,2798=>15,2800=>15,2799=>15,2781=>15,2782=>15,2783=>15,2784=>15,2785=>15,2786=>15,
 
     ];
 
     protected $cat_features  = [
-        1 => [1,2,3,4,5,6,7,8,9,10,11,12,13,14,74],
-        2 => [15,16,17,18,19,20,21,22],
-        3 => [23,25,26,27,28,29,30,31],
-        4 => [32,34,35,37,38],
-        5 => [39,41,42,43,44,45,46,47],
-        8 => [48,49,50,51,52,53],
-        10 => [61,62,63,64,65,66],
-        13 => [67,68,69,70,71,72,73],
-        14 => [67,68,69,70,71,72,73],
+        1 => [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,22],
+        2 => [25,26,27,28,29,30,31,32,33,34],
+        3 => [37,38,39,40,41,42,43,44,45,46,47,48,49,50],
+        4 => [53,54,55,56,57,58,59,60,61],
+        5 => [64,68,69,70,71,72,73,74,75,76,77,78],
+        8 => [81,82,83,84,85,86,87,88,89,90],
+//        9 => [93,94,95,96,97,98,99,100,101,102,103],
+//        10 => [106,107,108,109,110,111,112,113],
+//        11 => [116,117,118,119,120,121,122,123,124,125,126,127],
+//        13 => [116,117,118,119,120,121,122,123,124,125,126,127],
+//        14 => [116,117,118,119,120,121,122,123,124,125,126,127],
+        12 => [142,143,144,145,146,147,148,149],
+        15 => [130,131,132,133,134,135,136,137,138,139],
     ];
 
     protected $defNames = [
-        1=>"Комплект постельного белья",
+        1=>"Постельное белье",
         2=>"Подушка",
         3=>"Одеяло",
         4=>"Плед",
@@ -69,8 +74,10 @@ class ParserKazanova extends Command
         9=>"Наматрасник",
         10=>"Пододеяльник",
         11=>"Простынь",
+        12=>"Коврик",
         13=>"Простынь на резинке",
         14=>"Простынь без резинки",
+        15=>"Скатерть"
     ];
 
     protected $sn = [
@@ -82,20 +89,22 @@ class ParserKazanova extends Command
         8=>"PC",
         9=>"MP",
         10=>"DC",
-        11=>"SH",
+        11=>"SR",
         13=>"SR",
+        12=>"CV",
         14=>"SN",
+        15=>"SK",
     ];
 
     protected $features = [
         // 1.Постельное белье
-        'model'=>[1,15,23,32,39,48,54,61,67],
-        'Размер для сайта'=>[2,16,25,34,41,49,55,62,68],
-        'Комплектация для сайта'=>[3,43],
-        'Материал для сайта'=>[7,17,26,35,42,50,56,63,69],
-        'Состав для сайта'=>[8],
-        'Наполнитель'=>[18,28],
-        'Цвет для сайта'=>[9,20,29,36,45,51,58,64,70],
+        'model'=>[2,25,37,53,64,81,130,142],
+        'Размер для сайта'=>[3,27,40,56,70,83,132,144],
+        'Комплектация для сайта'=>[5,26,38,54,68,82,131,143],
+        'Материал для сайта'=>[11,28,41,57,71,84,135,145],
+        'Состав для сайта'=>[12,30,44,58,74,85,136,146],
+        'Наполнитель'=>[29,43],
+        'Цвет для сайта'=>[13,32,48,59,76,87,138,148],
 
     ];
 
@@ -145,45 +154,54 @@ class ParserKazanova extends Command
         $this->download_xml_file($this->url, storage_path('files'.DIRECTORY_SEPARATOR.$this->import_file));
         $file = storage_path('files'.DIRECTORY_SEPARATOR.$this->import_file);
 
-        $reader = new \SimpleXMLReader;
-        $reader->open($file);
-        $reader->registerCallback("offer", function($reader) {
-            $xml = $reader->expandSimpleXml();
-            $attributes = $xml->attributes();
+        if(\Storage::disk('parser')->exists($this->import_file)) {
 
-            if ($attributes->{"available"} == 'true') {
-                $xml->stock = 1;
-            } else {
-                $xml->stock = 0;
+            \DB::table('products')->where('provider_id', '=', $this->provider_id)->update(['checked'=>0]);
+
+            $reader = new \SimpleXMLReader;
+            $reader->open( $file );
+            $reader->registerCallback( "offer", function ( $reader ) {
+                $xml = $reader->expandSimpleXml();
+                $attributes = $xml->attributes();
+
+                if ( $attributes->{"available"} == 'true' ) {
+                    $xml->stock = 1;
+                } else {
+                    $xml->stock = 0;
+                }
+                $xml->id = (int)preg_replace( "/\D/", "", $attributes->{"id"} );
+                if ( isset( $this->categories[ (int)$xml->categoryId ] ) && (int)$xml->quantity > 1 ) {
+
+                    $this->items[] = $xml;
+                }
+
+                return true;
+
+            } );
+            $reader->parse();
+            $reader->close();
+
+
+            foreach ( $this->items as $k => $item ) {
+                $item = (array)$item;
+                unset( $item[ 'param' ] );
+                foreach ( $this->items[ $k ]->param as $key => $value ) {
+                    $item[ (string)$value->attributes()->name ] = (string)$value;
+                }
+
+                $it = $this->convert_item( $item );
+
+
+                if ( isset( $this->categories[ $it[ 'category' ] ] ) ) {
+                    $this->import_item( $it );
+
+                }
+
             }
-            $xml->id = (int) preg_replace("/\D/", "", $attributes->{"id"});
-            if(isset($this->categories[(int)$xml->categoryId]) && (int)$xml->quantity > 1) {
 
-                $this->items[] = $xml;
-            }
-
-            return true;
-
-        });
-        $reader->parse();
-        $reader->close();
-
-
-
-        foreach ($this->items as $k=>$item) {
-            $item = (array)$item;
-            unset($item['param']);
-            foreach ($this->items[$k]->param as $key => $value) {
-                $item[(string)$value->attributes()->name] = (string)$value;
-            }
-
-            $it = $this->convert_item($item);
-
-
-            if(isset($this->categories[$it['category']])) {
-                $this->import_item($it);
-
-            }
+//            \DB::table('products')->where('provider_id', '=', $this->provider_id)->where('checked', '=', 0)->update(['enabled'=>0]);
+            \DB::table('variants as v')->join('products as p', 'p.id', '=', 'v.product_id')->where('p.provider_id', '=', $this->provider_id)->where('p.checked', '=', 0)->update(['v.stock'=>0]);
+//            \DB::table('products')->where('provider_id', '=', $this->provider_id)->where('checked', '=', 1)->update(['enabled'=>1]);
 
         }
 
@@ -275,8 +293,10 @@ class ParserKazanova extends Command
                 if(isset($item['body']))
                     $product->body = trim($item['body']);
 
-
-                $product->enabled = 1;
+                if(empty($variant_id)) {
+                    $product->enabled = 1;
+                }
+                $product->checked = 1;
 
                 $product->provider_id = $this->provider_id;
 
@@ -330,55 +350,68 @@ class ParserKazanova extends Command
 
 
             // Изображения товаров
-            if(isset($item['images']) && $imported_item->status != 'updated')
+            if(isset($item['images']))
             {
-                $imgs = [];
-                // Изображений может быть несколько, через запятую
-                $images = explode(',', $item['images']);
-                foreach($images as $image)
-                {
-                    $image = trim($image);
 
 
-                    if(!empty($image))
-                    {
-                        // Имя файла
-                        $path = 'products'.DIRECTORY_SEPARATOR.date('mY').DIRECTORY_SEPARATOR;
-                        $filename = $this->generateFileName($image, $path);
-
-                        if(!\Storage::disk('public')->exists($path)){
-                            \Storage::disk('public')->makeDirectory($path);
-                        }
-
-                        copy($image, \Storage::disk('public')->path($path.$filename));
-                        $imgs[] = $path.$filename;
-
-
-
-
-
-
+                $update_image = true;
+                if($imported_item->status == 'updated') {
+                    $temp_imgs = json_decode($product->images);
+                    if(\Storage::disk('public')->exists( $temp_imgs[0])){
+                        $update_image = false;
                     }
+
                 }
-                $product->images = json_encode($imgs);
-                $product->save();
+
+                if($update_image) {
+                    $imgs = [];
+                    // Изображений может быть несколько, через запятую
+                    $images = explode( ',', $item[ 'images' ] );
+                    foreach ( $images as $image ) {
+                        $image = trim( $image );
+
+
+                        if ( !empty( $image ) ) {
+                            // Имя файла
+                            $path = 'products' . DIRECTORY_SEPARATOR . date( 'mY' ) . DIRECTORY_SEPARATOR;
+                            $filename = $this->generateFileName( $image, $path );
+
+                            if ( !\Storage::disk( 'public' )->exists( $path ) ) {
+                                \Storage::disk( 'public' )->makeDirectory( $path );
+                            }
+
+                            try {
+                                if ( copy( $image, \Storage::disk( 'public' )->path( $path . $filename ) ) ) {
+                                    $imgs[] = $path . $filename;
+                                } else {
+                                    throw new \Exception($image.' не доступен');
+                                }
+                            } catch (\Exception $e) {
+                                echo 'Выброшено исключение: ',  $e->getMessage(), "\n";
+                            }
+
+
+                        }
+                    }
+                    $product->images = json_encode( $imgs );
+                    $product->save();
+                }
             }
-            // Характеристики товаров
-            foreach($item as $feature_id=>$feature_value)
-            {
-                // Если нет такого названия колонки, значит это название свойства
 
-                // Свойство добавляем только если для товара указана категория и непустое значение свойства
-                if($category_id && $feature_value!=='')
-                {
-                    if(in_array($feature_id, $this->cat_features[$category_id]))
-                    {
+            if($imported_item->status != 'updated') {
+                // Характеристики товаров
+                foreach ( $item as $feature_id => $feature_value ) {
 
-                        Option::replace([
-                                'product_id'=> (int)$product_id,
-                                'feature_id'=>(int)$feature_id,
-                                'value'=>$feature_value,
-                            ]);
+
+                    // Свойство добавляем только если для товара указана категория и непустое значение свойства
+                    if ( $category_id && $feature_value !== '' ) {
+                        if ( in_array( $feature_id, $this->cat_features[ $category_id ] ) ) {
+
+                            Option::replace( [
+                                'product_id' => (int)$product_id,
+                                'feature_id' => (int)$feature_id,
+                                'value' => $feature_value,
+                            ] );
 //                        \DB::insert(DB::raw('REPLACE INTO options SET SET product_id= :pid, feature_id= :fid, value= :val'), [
 //                            'pid'=>(int)$product_id,
 //                            'fid'=>(int)$feature_id,
@@ -386,8 +419,9 @@ class ParserKazanova extends Command
 //                        ]);
 
 
-                    }
+                        }
 
+                    }
                 }
             }
             return $imported_item;

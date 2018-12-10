@@ -7,7 +7,7 @@
                         <div class="nano">
                             <div class="nano-content">
                                 <ul class="filter-menu">
-                                    @foreach ($f->options()->groupBy('value')->get() as $o)
+                                    @foreach ($f->foptions()->groupBy('value')->get() as $o)
                                         <li class="filter-field"><div class="checkbox"><input type="checkbox" name="features[{{ $f->id }}][]" value="{{ $o->value }}"><span>{{ $o->value }}</span></div></li>
                                     @endforeach
                                 </ul>

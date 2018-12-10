@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="56px" viewBox="0 0 64 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>иконка / карта</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="иконка-/-карта" fill="#FFFFFF" stroke="#C10015">
+            <g id="Group-3">
+                <path d="M1,10.6439133 L1,54.4469958 L21,45.3560867 L21,1.55300418 L1,10.6439133 Z" id="Rectangle-10" stroke-width="2"></path>
+                <path d="M21,1.5 L21,45.3333333 L43,54.5 L43,10.6666667 L21,1.5 Z" id="Rectangle-10-Copy" stroke-width="2"></path>
+                <path d="M43,10.6439133 L43,54.4469958 L63,45.3560867 L63,1.55300418 L43,10.6439133 Z" id="Rectangle-10-Copy-2" stroke-width="2"></path>
+            </g>
+        </g>
+    </g>
+</svg>

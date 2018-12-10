@@ -25,7 +25,10 @@ class AppServiceProvider extends ServiceProvider
         }
         \View::share('cart_total', $cart_total);
         $categories = Category::where('parent_id', '=', 0)
-            ->where('enabled', '=', 1)->get();
+            ->where('type', '=', 'c')
+            ->where('enabled', '=', 1)
+            ->orderBy('position', 'asc')
+            ->get();
         \View::share('cats', $categories);
     }
 
@@ -36,6 +39,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ($this->app->environment() !== 'production') {
+            $this->app->register(\Way\Generators\GeneratorsServiceProvider::class);
+            $this->app->register(\Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class);
+        }
+
+        require_once __DIR__ . '/../Http/helpers.php';
     }
 }

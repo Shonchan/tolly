@@ -12,7 +12,7 @@ class Category extends Model
     }
 
     public function getChilds(){
-        return $this->hasMany('App\Category', 'parent_id', 'id')->where('enabled', '=', 1);
+        return $this->hasMany('App\Category', 'parent_id', 'id')->where('type', '=', 'c')->where('enabled', '=', 1);
     }
 
     public function parent(){
@@ -24,6 +24,7 @@ class Category extends Model
         $cats = \DB::table('categories')
             ->select('id')
             ->where('parent_id', '=', $this->id)
+            ->where('type', '=', 'c')
             ->get('id');
         foreach ( $cats as $cat ) {
             $ids[] = $cat->id;
@@ -49,5 +50,10 @@ class Category extends Model
 
 
         return $categories;
+    }
+
+    public function getSeoAttribute()
+    {
+        return explode('|', $this->seo_text);
     }
 }

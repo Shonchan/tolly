@@ -15,6 +15,7 @@
 @stop
 
 @section('content')
+    <style type="text/css">.btn-feats{margin-right: 10px}</style>
     <div class="page-content edit-add container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -32,6 +33,12 @@
 
                     <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
+
+                        <input type="hidden" name="var_feats[]" value="">
+                        @foreach ($var_feats as $vf)
+                            <input type="hidden" name="var_feats[]" value="{{ $vf }}">
+                        @endforeach
+
 
                         <div class="panel-body">
 
@@ -75,13 +82,15 @@
                                                             <tr>
                                                                 <td>
                                                                     <input type="hidden" name="variants[id][]" value="{{ $v->id }}">
-                                                                    <input type="text" name="variants[name][]" value="{{ $v->name }}">
+                                                                    <input type="hidden" name="variants[feats][]" value="{{ $v->feats }}">
+                                                                    <input class="form-control" type="text" name="variants[name][]" value="{{ $v->name }}">
                                                                 </td>
-                                                                <td><input type="text" name="variants[sku][]" value="{{ $v->sku }}"></td>
-                                                                <td><input type="text" name="variants[price][]" value="{{ $v->price }}"></td>
-                                                                <td><input type="text" name="variants[compare_price][]" value="{{ $v->compare_price }}"></td>
-                                                                <td><input type="text" name="variants[stock][]" value="{{ $v->stock }}"></td>
-                                                                <td>@if (!$loop->first)
+                                                                <td><input class="form-control" type="text" name="variants[sku][]" value="{{ $v->sku }}"></td>
+                                                                <td><input class="form-control" type="text" name="variants[price][]" value="{{ $v->price }}"></td>
+                                                                <td><input class="form-control" type="text" name="variants[compare_price][]" value="{{ $v->compare_price }}"></td>
+                                                                <td><input class="form-control" type="text" name="variants[stock][]" value="{{ $v->stock }}"></td>
+                                                                <td><div class='btn btn-warning btn-tb btn-feats'>...</div>
+                                                                    @if (!$loop->first)
                                                                         <div class='btn btn-danger btn-tb btn-remV'>Удалить</div>
                                                                 @endif</td>
                                                             </tr>
@@ -89,12 +98,15 @@
 
                                                     @else
                                                         <tr>
-                                                            <td><input type="text" name="variants[name][]"></td>
-                                                            <td><input type="text" name="variants[sku][]"></td>
-                                                            <td><input type="text" name="variants[price][]"></td>
-                                                            <td><input type="text" name="variants[compare_price][]"></td>
-                                                            <td><input type="text" name="variants[stock][]"></td>
-                                                            <td></td>
+                                                            <td>
+                                                                <input type="hidden" name="variants[feats][]">
+                                                                <input class="form-control" type="text" name="variants[name][]">
+                                                            </td>
+                                                            <td><input class="form-control" type="text" name="variants[sku][]"></td>
+                                                            <td><input class="form-control" type="text" name="variants[price][]"></td>
+                                                            <td><input class="form-control" type="text" name="variants[compare_price][]"></td>
+                                                            <td><input class="form-control" type="text" name="variants[stock][]"></td>
+                                                            <td><div class='btn btn-warning btn-tb btn-feats'>...</div></td>
                                                         </tr>
                                                     @endif
                                                     <tr>
@@ -108,6 +120,67 @@
 
 
 
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading"><h5 class="panel-title">Свойства</h5></div>
+
+                                            @if (isset($features) && count($features)>0)
+                                                <style>
+                                                    .mb-0{
+                                                        margin-bottom: 0!important;
+                                                    }
+                                                    ul.list-opts{
+                                                        list-style: none;
+                                                        margin: 10px;
+                                                    }
+                                                    ul.list-opts > li {
+                                                        margin-bottom: 5px;
+                                                    }
+                                                    .add-opt, .rem-opt{
+                                                        margin-top: 0!important;
+                                                    }
+                                                    .btn-block{
+                                                        background-color: #ffdada;
+                                                    }
+                                                    .btn-block.blocked{
+                                                        color: white;
+                                                        background-color: #860303;
+                                                    }
+
+                                                </style>
+                                                <ul class="list-opts col-md-10">
+                                                    @foreach ($features as $f)
+                                                        @if(isset($p_options[$f->id]))
+                                                            @foreach ($p_options[$f->id] as $o)
+                                                                <li class=" row">
+
+                                                                    <div class="col-md-4 mb-0">@if ($loop->first)<input class="form-control" type="text" value="{{ $f->name }}" disabled>@endif</div>
+                                                                    <div class="col-md-6 mb-0"><input class="form-control" type="text" value="{{ $o }}" name="features[{{$f->id}}][]"></div>
+                                                                    @if ($loop->first)
+                                                                        <div class="col-md-1 mb-0"><button type="button" class="btn btn-success add-opt">+</button></div>
+                                                                        <div class="col-md-1 mb-0"><button type="button" class="btn btn-block @if(in_array($f->id, $var_feats)){{"blocked"}}@endif">block</button></div>
+                                                                    @endif
+                                                                    @if (!$loop->first)
+                                                                        <div class="col-md-1 mb-0"><button type="button" class="btn btn-danger rem-opt">-</button></div>
+                                                                    @endif
+
+                                                                </li>
+                                                            @endforeach
+                                                        @else
+                                                            <li class="row">
+                                                                <div class="col-md-4 mb-0"><input class="form-control" type="text" value="{{ $f->name }}" disabled></div>
+                                                                <div class="col-md-6 mb-0"><input class="form-control" type="text" value="" name="features[{{$f->id}}][]" @if(in_array($f->id, $var_feats)){{"disabled"}}@endif></div>
+                                                                <div class="col-md-1 mb-0"><button type="button" class="btn btn-success add-opt">+</button></div>
+                                                                <div class="col-md-1 mb-0"><button type="button" class="btn btn-block @if(in_array($f->id, $var_feats)){{"blocked"}}@endif">block</button></div>
+                                                            </li>
+                                                        @endif
+                                                    @endforeach
+                                                    <li class="row"><button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button></li>
+                                                </ul>
+
+                                            @endif
                                         </div>
                                     </div>
                                 @endif

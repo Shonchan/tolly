@@ -68,25 +68,142 @@
 /***/ "./resources/assets/js/admin.js":
 /***/ (function(module, exports) {
 
-// $('#add-variant').click(function () {
-//    alert('test');
-// });
-        $('select[name="category_id"]').change(function () {
-            $.ajax({
+        $('#add-variant').click(function () {
+
+            var tr = '<tr><td><input type="hidden" name="variants[id][]">' +
+                '<input type="hidden" name="variants[feats][]">' +
+                '<input class="form-control" type="text" name="variants[name][]"></td>' +
+                '<td><input class="form-control" type="text" name="variants[sku][]"></td>' +
+                '<td><input class="form-control" type="text" name="variants[price][]"></td>' +
+                '<td><input class="form-control" type="text" name="variants[compare_price][]"></td>' +
+                '<td><input class="form-control" type="text" name="variants[stock][]"></td>' +
+                '<td><div class=\'btn btn-warning btn-tb btn-feats\'>...</div><div class=\'btn btn-danger btn-tb btn-remV\'>Удалить</div></td>' +
+                '</tr>';
+            $(this).closest('tr').before(tr);
+            setHookRemV();
+            setHookFeats();
+        });
+
+
+        setHookRemV();
+        setHookRemO();
+        setHookFeats();
+        setHookBlock();
+
+        $('.add-opt').click(function () {
+            if($(this).closest('li').find('.btn-block').hasClass("blocked") === false) {
+                var li = $(this).closest('li').clone();
+
+                li.find('button.add-opt').removeClass('add-opt btn-success').addClass('rem-opt btn-danger').text("-");
+                li.find('div.col-md-4').html("");
+                li.find('.btn-block').remove();
+                li.find('input[name^="features"]').val("");
+                $(this).closest('li').after(li);
+                setHookRemO();
+            }
+        });
+
+
+
+
+
+        $('select[name="parent_id"], select[name="type"]').change(function () {
+            if($('select[name="type"]').val() == 'mc') {
+                $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    type:"POST",
-                    url:"/ajax/filter",
-                    data:{'id':this.value},
-                    dataType:"json",
+                    type: "POST",
+                    url: "/ajax/filter",
+                    data: {'id': $('select[name="parent_id"]').val()},
+                    dataType: "json",
                     //beforeSend:function(){ $('#ul_pro').html('<div class="load"></div>'); },
-                    success:function(data){
-                        $('#filter').append(data);
+                    success: function (data) {
+                        $('#filter').html(data);
 
                     }
                 });
+            } else {
+                $('#filter').html("");
+            }
         });
+
+        function setHookRemV() {
+            $('.btn-remV').click(function () {
+                $(this).closest('tr').remove();
+            });
+        }
+
+        function setHookRemO() {
+            $('.rem-opt').click(function () {
+                $(this).closest('li').remove();
+            });
+        }
+
+        function setHookBlock() {
+            $('.btn-block').click(function () {
+                var name =  $(this).closest('li').find('input[name^="features"]').attr('name');
+                var result = name.match(/features\[([\d]+)]/i);
+                var fid= result[1];
+
+
+                $(this).toggleClass('blocked');
+                if($(this).hasClass('blocked')) {
+                    $('input[name="' + name + '"]').prop('disabled', true);
+                    var inOld = $('input[name="var_feats[]"]').first();
+                    var inNew = inOld.clone();
+                    inNew.val(fid);
+                    inOld.after(inNew);
+                } else {
+                    $('input[name="' + name + '"]').prop('disabled', false);
+                    console.log($('input[name="var_feats[]"][value=' + fid + ']'));
+                    $('input[name="var_feats[]"][value=' + fid + ']').remove();
+                }
+            });
+        }
+
+        function setHookFeats() {
+            $('.btn-feats').click(function () {
+                var vid = $(this).closest('tr').find('input[name="variants[id][]"]').val();
+                var vfeats = $(this).closest('tr').find('input[name="variants[feats][]"]').val();
+                var vfa = $('input[name="var_feats[]"]').serializeArray();
+                var dd = $(this).closest('tr').find('input').serializeArray();
+                var tr = $(this);
+                // console.log(dd);
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    url: "/ajax/variant_features",
+                    data: {'id': vid, 'feats':vfeats, 'vfeats':vfa},
+                    dataType: "json",
+                    //beforeSend:function(){ $('#ul_pro').html('<div class="load"></div>'); },
+                    success: function (data) {
+                        $.fancybox.open(data); // fa
+                        $('.save-vfeats').click(function (e) {
+                            e.preventDefault();
+                            var ff = $('form#v_features').serializeArray();
+
+
+                            var feats = {};
+                            for (var i=0; i<ff.length; i++){
+                                if(ff[i].value) {
+                                    var name = ff[i].name;
+                                    // var it = {};
+                                    feats[ff[i].name]=ff[i].value;
+
+                                }
+                            }
+                            tr.closest('tr').find('input[name="variants[feats][]"]').val(JSON.stringify(feats));
+                            $.fancybox.close();
+                        });
+                        // $.fancybox.open('<div class="message"><h2>Hello!</h2><p>You are awesome!</p></div>');
+
+                    }
+                });
+            });
+        }
 
         // $('#refresh_filter').click(function (e) {
         //     e.preventDefault();

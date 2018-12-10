@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="48px" viewBox="0 0 64 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>иконка / авто</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="иконка-/-авто" fill="#FFFFFF" stroke="#C10015">
+            <g id="Group-2">
+                <path d="M41,42 L41,4 C41,2.34314575 39.6568542,1 38,1 L4,1 C2.34314575,1 1,2.34314575 1,4 L1,39 C1,40.6568542 2.34314575,42 4,42 L41,42 Z" id="Rectangle-9" stroke-width="2"></path>
+                <path d="M41,11 L41,42.0002339 L59.0000566,42.0002435 C61.2091956,42.000239 63.000053,40.2093744 63.0000485,38.0002369 L63.0000243,31.0001187 C63.0000095,23.6754576 59.7993381,16.7165104 54.2380408,11.9496842 L53.1300759,11 L41,11 Z" id="Rectangle-9-Copy" stroke-width="2"></path>
+                <circle id="Oval" stroke-width="2" cx="13" cy="42" r="5"></circle>
+                <circle id="Oval-Copy-2" stroke-width="2" cx="52" cy="42" r="5"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

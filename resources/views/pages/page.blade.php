@@ -6,16 +6,19 @@
 @section('ogtitle'){{'Tolly'}}@endsection
 @section('ogdescription')@endsection
 
+
+@section('pager')
+    <ul class="breadcrumbs">
+      <li>
+        <a href="/" itemprop="url"><span itemprop="title">Главная</span></a>
+      </li>
+    </ul>
+@endsection
+
 @section('content')
-    <div class="row">
+    <div class="page articles">
         <h1>{{ $page->name }}</h1>
-
-        <h3>{{ $page->created_at }}</h3>
-
-        <p>
-            {!! $page->body !!}
-        </p>
-
+        {!! $page->body !!}
     </div>
 
 

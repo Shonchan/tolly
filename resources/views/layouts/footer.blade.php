@@ -3,28 +3,26 @@
         <div class="foot-item">
             <div class="foot-title">Информация</div>
             <ul class="foot-menu">
-                <li class="foot-field"><a href="javascript:;" rel="nofollow">О компании</a></li>
-                <li class="foot-field"><a href="javascript:;" rel="nofollow">Сертификаты</a></li>
-                <li class="foot-field"><a href="javascript:;" rel="nofollow">Новости</a></li>
-                <li class="foot-field"><a href="javascript:;" rel="nofollow">Контакты</a></li>
+                <li class="foot-field"><a href="/o-kompanii" rel="nofollow">О компании</a></li>
+                <li class="foot-field"><a href="/publichnaya-ofyerta" rel="nofollow">Публичная оферта</a></li>
+                <li class="foot-field"><a href="/kontakty" rel="nofollow">Контакты</a></li>
             </ul>
         </div>
         <div class="foot-item">
             <div class="foot-title">Как мы работаем</div>
             <ul class="foot-menu">
-                <li class="foot-field"><a href="javascript:;" rel="nofollow">Доставка</a></li>
-                <li class="foot-field"><a href="javascript:;" rel="nofollow">Оплата</a></li>
-                <li class="foot-field"><a href="javascript:;" rel="nofollow">Гарантия</a></li>
-                <li class="foot-field"><a href="javascript:;" rel="nofollow">Обмен/возврат</a></li>
+                <li class="foot-field"><a href="/dostavka" rel="nofollow">Доставка</a></li>
+                <li class="foot-field"><a href="/oplata" rel="nofollow">Оплата</a></li>
+                <li class="foot-field"><a href="/vozvrat-i-obmyen" rel="nofollow">Обмен/возврат</a></li>
             </ul>
         </div>
         <div class="foot-item">
             <div class="foot-title">Каталог</div>
             <ul class="foot-menu">
-                <li class="foot-field"><a href="javascript:;" rel="nofollow"Постельное белье</a></li>
-                <li class="foot-field"><a href="javascript:;" rel="nofollow">Подушки</a></li>
-                <li class="foot-field"><a href="javascript:;" rel="nofollow">Одеяла</a></li>
-                <li class="foot-field"><a href="javascript:;" rel="nofollow">Пледы</a></li>
+                <li class="foot-field"><a href="/postyelnoye-byelye" rel="nofollow">Постельное белье</a></li>
+                <li class="foot-field"><a href="/podushki" rel="nofollow">Подушки</a></li>
+                <li class="foot-field"><a href="/odyeyala" rel="nofollow">Одеяла</a></li>
+                <li class="foot-field"><a href="/plyedy" rel="nofollow">Пледы</a></li>
             </ul>
         </div>
         <div class="foot-item" itemscope itemtype="http://schema.org/Organization">

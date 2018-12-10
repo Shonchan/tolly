@@ -15,7 +15,7 @@
                             <ul class="filter-menu_child">
                                 @foreach ($cat->getChilds as $c)
 
-                                    @if($ch->enabled)
+                                    @if($c->enabled)
                                     <li><a href="{{ url($c->slug) }}">{{ $c->name }}</a></li>
                                     @endif
 
@@ -60,10 +60,10 @@
 
     @endif
     <div class="filter-block">
-        <form id="filter">
+        <form id="filter" class="category-page">
             <input type="hidden" name="page" value="1">
             <input type="hidden" name="sort" value="popular">
-            <input type="hidden" name="category" value="{{ $category->id }}">
+            <input type="hidden" name="category" value="{{ $category_id }}">
             <h3>Фильтр</h3>
             <div class="filter-collapse">
                 <div class="filter-collapse-name current">Цена, руб.</div>
@@ -95,8 +95,11 @@
                         <div class="nano">
                             <div class="nano-content">
                                 <ul class="filter-menu">
-                                    @foreach ($f->options()->groupBy('value')->get() as $o)
-                                        <li class="filter-field"><div class="checkbox"><input type="checkbox" name="features[{{ $f->id }}][]" value="{{ $o->value }}"><span>{{ $o->value }}</span></div></li>
+                                    @foreach ($f->options as $o)
+                                        <li class="filter-field"><div class="checkbox"><input @if (isset($mark) && isset($mark->features[$f->id]) && in_array($o->value, $mark->features[$f->id]))
+                                            checked
+                                        @endif
+                                        type="checkbox" name="features[{{ $f->id }}][]" value="{{ $o->value }}"><span>{{ $o->value }}</span></div></li>
                                     @endforeach
                                 </ul>
                             </div>
