@@ -21,7 +21,10 @@ class IndexController extends Controller
 
             $p->imgs = json_decode($p->images);
           //  dd($p->images);
-            $p->img = $this->imgSize(320, 200, $p->imgs[0]);
+            if(isset($p->imgs[0]))
+                $p->img = $this->imgSize(320, 200, $p->imgs[0]);
+            else
+                $p->img = '';
         }
 //        \Debugbar::info($new_products);
         $geo_id = 1;
@@ -49,6 +52,8 @@ class IndexController extends Controller
     private function imgSize($width=320, $height=200, $img){
         if(empty($img))
             return false;
+
+//        $img = str_replace('.JPEG', '.jpg', $img);
 
         $resizePath = storage_path('app/public').DIRECTORY_SEPARATOR;
         $parts = explode('.', $img);

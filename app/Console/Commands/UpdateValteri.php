@@ -79,9 +79,14 @@ class UpdateValteri extends Command
             if ( isset( $it[ 'cat_id' ], $this->categories ) || isset( $it[ 'par_cat_id' ], $this->categories ) ) {
                 $variant = Variant::where( 'sku', '=', $it[ 'article_and_param' ] )->first();
 
+                if($variant->product()->enabled == 0)
+                    continue;
 
                 if ( $variant ) {
                     $item = [];
+
+                    $cat_id = \DB::table('products_categories')->select('category_id')->where('product_id', '=', $variant->product_id)->first();
+
                     if ( isset( $it[ 'count_goods' ] ) ) {
                         $item[ 'stock' ] = trim( $it[ 'count_goods' ] );
                     } else {
@@ -89,6 +94,9 @@ class UpdateValteri extends Command
                     }
                     if ( isset( $it[ 'price' ] ) ) {
                         $item[ 'price' ] = trim( $it[ 'price' ] );
+                        if($cat_id->category_id == 1) {
+                            $item['compare_price'] =  floor($item['price']*1.4) ;
+                        }
                     }
 
 //                    print_r( $item );

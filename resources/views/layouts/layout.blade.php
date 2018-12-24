@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="initial-scale=1.0, width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="format-detection" content="telephone=no" />
 
     <title>@yield('title', '')</title>
@@ -42,10 +42,10 @@
     <link rel="stylesheet" href="{{ url('css/fotorama.css?v=1.2.1') }}">
     @endif
 
-    <link rel="stylesheet" href="{{ url('css/style.css?v=1.2.5') }}">
+    <link rel="stylesheet" href="{{ url('css/style.css?v=1.3.3') }}">
 </head>
 <body>
-<!-- Yandex.Metrika counter --><script>(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter48634619 = new Ya.Metrika2({ id:48634619, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, trackHash:true, ut:"noindex" }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/tag.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks2"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/48634619?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+<!-- Yandex.Metrika counter --> <script type="text/javascript" > (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(48634619, "init", { id:48634619, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, trackHash:true, ecommerce:"dataLayer" }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/48634619" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
 <script async src="https://www.google-analytics.com/analytics.js"></script><script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create', 'UA-127625387-1', 'auto');ga('send', 'pageview');setTimeout("ga('send', 'event', 'read', '15_seconds')", 15000)</script>
 <div class="wrap container">
     <div class="wrap-top">
@@ -71,9 +71,9 @@
     <script defer src="{{ url('js/rank.js') }}"></script>
     <script defer src="{{ url('js/selectize.js') }}"></script>
     <script defer src="{{ url('js/fotorama.js') }}"></script>
-
+    <script defer src="{{ url('js/tooltipster.js') }}"></script>
     <script defer src="{{ url('js/jquery.fancybox.min.js') }}"></script>
-    <script defer src="{{ url('js/common.js?v=1.2.64') }}"></script>
+    <script defer src="{{ url('js/common.js?v=1.3.54') }}"></script>
     <script defer src="{{ url('js/awesomeRating.min.js?v=1') }}"></script>
     <script defer src="{{ url('js/swiper.min.js?v=1') }}"></script>
 
@@ -81,7 +81,10 @@
         {{--<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>--}}
         {{--<script type="text/javascript" src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>--}}
 
-        <script defer src="{{ url('js/cart.js?v=1.1.64') }}"></script>
+        <script defer src="{{ url('js/cart.js?v=1.2.07') }}"></script>
     @endif
+
+    <!-- Rating@Mail.ru counter --><script type="text/javascript">var tmr = window._tmr || (window._tmr = []); tmr.push({id: "3063200", type: "pageView", start: (new Date()).getTime()}); (function (d, w, id) { if (d.getElementById(id)) return; var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id; ts.src = "https://top-fwz1.mail.ru/js/code.js"; var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);}; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "topmailru-code");</script><noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3063200;js=na" style="border:0;position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript><!-- //Rating@Mail.ru counter -->
+<!-- Chatra {literal} --><script>(function(d, w, c) { w.ChatraID = 'YtynLCjjtABqtZG8z'; window.ChatraSetup = { colors: { buttonText: '#fff', buttonBg: '#cc0000' } }; var s = d.createElement('script'); w[c] = w[c] || function() { (w[c].q = w[c].q || []).push(arguments); }; s.async = true; s.src = 'https://call.chatra.io/chatra.js'; if (d.head) d.head.appendChild(s); })(document, window, 'Chatra');</script><!-- /Chatra {/literal} -->
 </body>
 </html>

@@ -49,7 +49,8 @@ class UpdateAlvitek extends Command
         \DB::table('products')->where('provider_id', '=', $this->provider_id)->update(['checked'=>0]);
 
         $variants = \DB::table('variants as v')->join('products as p', 'p.id', '=', 'v.product_id')
-                        ->select('v.id', 'v.sku','v.price', 'v.stock', 'v.product_id')->where('p.provider_id', '=', $this->provider_id)->get();
+                        ->select('v.id', 'v.sku','v.price', 'v.stock', 'v.product_id')->where('p.provider_id', '=', $this->provider_id)
+                        ->where('p.enabled', '=', 1)->get();
 
         foreach ($variants as $variant) {
 
@@ -66,8 +67,15 @@ class UpdateAlvitek extends Command
             $this->client->setParams( $params );
             $prod = $this->client->makeRequest();
 
-            if ( isset( $prod[ 'DATA' ][ 'PRICE' ] ) )
-                $item['price'] = str_replace( ',', '.', str_replace( ' ', '', trim( $prod[ 'DATA' ][ 'PRICE' ] ) ) );
+            $cat_id = \DB::table('products_categories')->select('category_id')->where('product_id', '=', $variant->product_id)->first();
+
+
+            if ( isset( $prod[ 'DATA' ][ 'PRICE' ] ) ) {
+                $item[ 'price' ] = str_replace( ',', '.', str_replace( ' ', '', trim( $prod[ 'DATA' ][ 'PRICE' ] ) ) );
+                if($cat_id->category_id == 1) {
+                    $item['compare_price'] =  floor($item['price']*1.5) ;
+                }
+            }
             if ( isset( $prod[ 'DATA' ][ 'QUANTITY' ] ) ) {
                 $item['stock'] = trim( $prod[ 'DATA' ][ 'QUANTITY' ] );
             } else {
@@ -78,10 +86,13 @@ class UpdateAlvitek extends Command
                 $variant->sku = trim( $prod[ 'DATA' ][ 'ARTICLE' ] );
 
 
+
+
             $item['updated_at'] = date("Y-m-d H:i:s");
 
 //            \DB::table( 'variants' )->where( 'id', '=', $variant->id )->update( [ 'sku' => $variant->sku ] );
             \DB::table( 'variants' )->where( 'id', '=', $variant->id )->update( $item );
+
             \DB::table('products')->where('id', '=', $variant->product_id)->update(['checked'=>1,'updated_at'=>date("Y-m-d H:i:s")]);
 
         }

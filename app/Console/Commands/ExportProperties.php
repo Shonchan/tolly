@@ -40,7 +40,7 @@ class ExportProperties extends Command {
 
         $folder = 'temp_properties';
         
-        $categories = \App\Category::orderBy('id', 'ASC')->get();
+        $categories = \App\Category::orderBy('id', 'ASC')->where('type', '=', 'c')->get();
         
         foreach ($categories as &$category){
             $category->features = \App\Feature::where('category_id', '=', $category->id)->get();

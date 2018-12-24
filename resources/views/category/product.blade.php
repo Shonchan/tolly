@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title')@if($variant->name){{ $product->name }} {{ $variant->name }}@else{{ $product->name }}@endif @if($product->seo){{ $product->seo }} @endif{{'в интернет-магазине TOLLY.ru'}}@endsection
+@section('title')Купить @if($variant->name){{ mb_lcfirst($product->name) }} {{ $variant->name }}@else{{ mb_lcfirst($product->name) }}@endif @if($product->seo){{ $product->seo }} @endif{{'в интернет-магазине TOLLY.ru'}}@endsection
 @section('description')@if($variant->name){{ $product->name }} {{ $variant->name }}@else{{ $product->name }}@endif @if($product->seo) {{ $product->seo }}@endif{{' купить по выгодной цене в Москве. Отзывы покупателей. Доставка от 1 дня!'}}@endsection
 @section('canonical'){{ url('product', $variant->id) }}@endsection
 @section('ogtitle')@if($variant->name){{ $product->name }} {{ $variant->name }}@else{{ $product->name }}@endif  @if($product->seo){{ $product->seo }} @endif{{'в интернет-магазине TOLLY.ru'}}@endsection
@@ -32,7 +32,7 @@
             <div class="single-carousel">
               <div class="fotorama" data-nav="thumbs">
                 @foreach ($product->images as $i)
-                <a href="{{ url('storage', $i) }}" data-fancybox="gallery"><img itemprop="image" src="{{ $product->imgSize(500,500, $i) }}" alt="{{ $product->name }} {{ $variant->name }}@if($product->seo), {{ $product->seo }}@endif"></a>
+                <a href="{{ url('storage', $i) }}" data-fancybox="gallery"><img itemprop="image" src="{{ $product->imgSize(320,200, $i) }}" alt="{{ $product->name }} {{ $variant->name }}@if($product->seo), {{ $product->seo }}@endif"></a>
                 @endforeach
               </div>
             </div>
@@ -47,19 +47,25 @@
                                 @endfor
                             </ul>
                         </div>
-                        <div class="review">Отзывов ({{count($reviews)}})</div>
-                        <div class="comment"><a href="#add_review_form" class="add_review_open">Оставить отзыв</a></div>
+                        <div class="review"><a href="#block2" title="Оставить отзыв">@if (count($reviews) > 0){{ count($reviews) }} {{ plural(count($reviews), ["отзыв","отзывов", "отзыва"]) }}@else{{ 'нет отзывов' }}@endif</a></div>
+      									<div class="comment">Артикул {{ $variant->external_id }}</div>
                     </div>
                     <ul class="single-option">
-                        <li><b>В наличии: </b><span>{{ $variant->stock }} шт.</span></li>
-                        <li><b>Код товара: </b><span>{{ $variant->external_id }}</span></li>
+                    @if ($variant->stock == 3)<li class="text-orange">Поторопитесь, скоро закончится!</li>
+                    @elseif ($variant->stock == 2)<li class="text-orange">Поторопитесь, осталось две штуки!</li>
+                    @elseif ($variant->stock == 1)<li class="text-orange">Поторопитесь, осталась одна штука!</li>
+                    @elseif ($variant->stock == 0)<li class="text-red">К сожалению, товар разобрали</li>
+                    @else<li class="text-green">В наличии на складе</li>
+                    @endif
                     </ul>
+
+
                     <ul class="single-price">
-                        @if($product->variant()->compare_price)
-                        <li>Цена <span class="old">{{ $product->variant()->compare_price }} руб.</span> <span class="discount">-{{ 100-round($product->variant()->price/$product->variant()->compare_price*100)  }} %</span></li>
+                        @if($variant->compare_price)
+                        <li><span class="old">{{ $variant->compare_price }} руб.</span> <span class="discount"> -{{ 100-round($variant->price/$variant->compare_price*100)  }} %</span></li>
                         @endif
                         <li>
-                            <div class="price"><span itemprop="price">{{ $product->variant()->price }}</span> <span class="cur">руб.</span></div>
+                            <div class="price"><span itemprop="price">{{ $variant->price }}</span> <span class="cur"> руб.</span></div>
                             <meta itemprop="priceCurrency" content="RUB">
                             <link itemprop="availability" href="http://schema.org/InStock">
                         </li>
@@ -68,7 +74,11 @@
                     @if (count($variants) > 1)
                     <div class="single-setting">
                         <b>Вариант</b>
-                        <select class="select-single"></select>
+                        <div class="single-setting-list">
+                            @foreach ($variants as $v)
+                                <a data-stock="{{$v->stock}}" @if($variant->compare_price)data-compare_price="{{$v->compare_price}}"@endif data-price="{{$v->price}}" data-id="{{$v->id}}" href="{{ url('product', $v->id) }}"@if($v->id == $variant->id) class="current"@endif>{{ $v->name }}</a>
+                            @endforeach
+                        </div>
                     </div>
                     @endif
 
@@ -88,24 +98,27 @@
                                 <div class="basket-item">
                                     <div class="basket-product">
                                         <div class="basket-image">
-                                            <a href="{{ url('product', $product->id) }}" style="background-image: url('{{ $product->imgSize(320,200, $product->images[0]) }}')"></a>
+                                            <a href="{{ url('product', $variant->id) }}" style="background-image: url('@if(isset($product->images[0])){{ $product->imgSize(320,200, $product->images[0]) }}@endif')"></a>
                                         </div>
                                         <div class="basket-wrap">
                                             <div class="basket-title">
-                                                <a href="{{ url('product', $product->id) }}">{{ $product->name }}</a>
+                                                <a href="{{ url('product', $variant->id) }}">{{ $product->name }} <span>{{ $variant->name }}</span></a>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="basket-spinner">
-                                        <input type="text" class="spinner_one" name="variants[amount][]" value="{{ $amount }}">
-                                        <div class="basket-price">
-                                            {!! Form::hidden('variants[id][]', $vid) !!}
-                                            {!! Form::hidden('price', $vprice) !!}
-                                            <span class="price"><u>Цена: </u>{{ $vprice." руб/шт" }}</span>
+                                        {!! Form::hidden('variants[id][]', $variant->id) !!}
+                                        {!! Form::hidden('variants[price][]', $variant->price) !!}
+                                        {!! Form::hidden('variants[amount][]', $amount, ['data-max'=>$variant->stock]) !!}
+                                        <div class="ui-spin">
+                                            <span class="minus" onclick=""></span>
+                                            <div class="count">{{$amount}}</div>
+                                            <span class="plus" onclick=""></span>
                                         </div>
+                                        <div class="cost"></div>
                                     </div>
                                     <div class="basket-total">
-                                        <u>Итого: </u><span>{{ $vprice*$amount." руб." }}</span>
+                                       <span>{{ $vprice*$amount." руб." }}</span>
                                     </div>
                                     <div class="basket-remove"></div>
                                 </div>
@@ -122,10 +135,10 @@
                         </div>
                         {!! Form::close() !!}
 
-                        
-                            <div class="click"@if($variant->stock == 0) style="display: none"@endif>
+
+                            <!--div class="click"@if($variant->stock == 0) style="display: none"@endif>
                                 <button type="button" href="#buy_one_click_form" class="btn link one_click">купить в 1 клик</button>
-                            </div>
+                            </div-->
                             <div class="navbar-tallme" id="buy_one_click_form" style="display: none">
                                 <div class="navbar-title">Заказ в 1 клик</div>
                                 <p></p>
@@ -146,26 +159,43 @@
                                 <div class="errors"></div>
                                 {!! Form::close() !!}
                             </div>
-                        
+
                     </div>
+                    @if($variant->stock > 0)
                     <ul class="single-delivery">
-                        <li>
+                        <li><b>Доставка курьером</b><br />
                             @php
-                            $info = 'Доставка послезавтра';
+                            $info = 'послезавтра и позже';
                             $sec = time() - strtotime('today');
-                            
+
                             if($sec >= 0 && $sec <= 42000)
-                                $info = 'Доставка завтра';
-                                
+                                $info = 'завтра и позже';
+
                             @endphp
                             @if($product->variant()->price > 2999)
                             {{ $info.' - бесплатно' }}
                             @else
-                            {{ $info.' - 299 руб' }}
+                            {{ $info.' - 300 руб' }}
                             @endif
                         </li>
-                        <li>Самовывоз из <a rel="nofollow" href="{{ url('dostavka') }}">31 пункта</a></li>
+                        <li><b>Самовывоз</b><br />
+                            @php
+                            $info = 'послезавтра и позже';
+                            $sec = time() - strtotime('today');
+
+                            if($sec >= 0 && $sec <= 42000)
+                                $info = 'завтра и позже';
+
+                            @endphp
+                            @if($product->variant()->price > 2999)
+                            {{ $info.' - бесплатно' }}
+                            @else
+                            {{ $info.' - 150 руб' }}
+                            @endif
+                        </li>
+                        <li><b>Оплата</b><br />Наличными или банковской картой</li>
                     </ul>
+                    @endif
                 </div>
             </div>
         </div>
@@ -179,9 +209,8 @@
                 </div>
                 <div itemprop="description">
                     <div class="single-block js-tabs-body" data-id="block1" style="display: block">
-                        <h2>Описание</h2>
+                        <h2>Описание и характеристики</h2>
                         <p>{!! $product->body !!} </p>
-                        <h3>Основные характеристики</h3>
                         <ul class="single-charact">
                             <li>
                                 <span>Производитель</span>
@@ -201,29 +230,46 @@
                             <p>У этого товара пока нет отзывов. Поделитесь своим мнением об этом товаре, и многие будут вам благодарны.</p>
                         @else
                             <div class="msg">
-                                @foreach($reviews as $review)
-                                    <div class="msg-item">
-                                        <div class="msg-more">
-                                            <div class="msg-title">@if(isset($review->user)){{$review->user->name}}@else{{$review->name}}@endif</div>
-                                            <div class="msg-time">{{$review->created_at->format('d.m.Y')}}</div>
-                                        </div>
-                                        <div class="msg-text">
-                                            <p>{{$review->comment}}</p>
-                                        </div>
-                                        @if(isset($review->commentManager))
-                                            <div class="msg-item">
-                                                <div class="msg-more">
-                                                    <div class="msg-title">
-                                                        Менеджер {{$review->commentManager->manager->name}}</div>
-                                                    <div class="msg-time">{{$review->commentManager->created_at->format('d.m.Y')}}</div>
-                                                </div>
-                                                <div class="msg-text">
-                                                    <p>{{$review->commentManager->comment}}</p>
-                                                </div>
-                                            </div>
-                                        @endif
+                              @foreach($reviews as $review)
+                              <div class="msg-item">
+                                <div class="msg-user">
+                                  <div class="msg-userpic"><img src="http://placehold.it/40x40" alt=""></div>
+                                  <div class="msg-more">
+                                    <div class="msg-title">@if(isset($review->user)){{$review->user->name}}@else{{$review->name}}@endif</div>
+                                    <div class="msg-time">{{$review->created_at->format('d.m.Y')}}</div>
+                                  </div>
+                                  <div class="msg-star">
+                                    <ul class="star-list">
+                                      <li class="star-field current"></li>
+                                    </ul>
+                                  </div>
+                                </div>
+                                <div class="msg-text">
+                                  <p>{{$review->comment}}</p>
+                                  <div class="msg-rank">
+                                    <span>Отзыв был полезен?</span>
+                                    <ul>
+                                      <li><span class="plus"><i class="fas fa-thumbs-up"></i></span></li>
+                                      <li><span class="minus"><i class="fas fa-thumbs-down"></i></span></li>
+                                    </ul>
+                                  </div>
+                                </div>
+                                @if(isset($review->commentManager))
+                                <div class="msg-item">
+                                  <div class="msg-user">
+                                    <div class="msg-userpic"><img src="http://placehold.it/40x40" alt=""></div>
+                                    <div class="msg-more">
+                                      <div class="msg-title">Менеджер {{$review->commentManager->manager->name}}</div>
+                                      <div class="msg-time">{{$review->commentManager->created_at->format('d.m.Y')}}</div>
                                     </div>
-                                @endforeach
+                                  </div>
+                                  <div class="msg-text">
+                                    <p>{{$review->commentManager->comment}}</p>
+                                  </div>
+                                </div>
+                                @endif
+                              </div>
+                              @endforeach
                             </div>
                         @endif
 
@@ -286,7 +332,7 @@
                             <div class="swiper-slide">
                                 <div class="post" itemscope itemtype="http://schema.org/Product">
                                     <div class="pc">
-                                        <div class="pc-image"><a data-similar="{{ $sProduct->id }}" href="{{ url('/product', $sProduct->variant()->id) }}"><img src="{{ $sProduct->imgSize(320,200, $sProduct->images[0]) }}" alt="" itemprop="image"></a></div>
+                                        <div class="pc-image"><a data-similar="{{ $sProduct->id }}" href="{{ url('/product', $sProduct->variant()->id) }}"><img src="@if(isset($sProduct->images[0])){{ $sProduct->imgSize(320,200, $sProduct->images[0]) }}@endif" alt="" itemprop="image"></a></div>
                                         <div class="pc-name"><a data-similar="{{ $sProduct->id }}" href="{{ url('/product', $sProduct->variant()->id) }}" itemprop="name">{{$sProduct->name}} {{$sProduct->variant()->name}}</a></div>
                                         <meta content="{{$sProduct->name}}" itemprop="description">
                                         <div class="pc-content" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -303,6 +349,26 @@
             </div>
         @endif
     </div>
+    <!-- Rating@Mail.ru counter dynamic remarketing appendix --><script type="text/javascript">var _tmr = _tmr || []; _tmr.push({ type: 'itemView', productid: '{{ $variant->id }}', pagetype: 'product', list: '1', totalvalue: '{{ $product->variant()->price }}' });</script><!-- // Rating@Mail.ru counter dynamic remarketing appendix -->
 
+  <script type="text/javascript">
+    window.dataLayer.push ({
+      "ecommerce": {
+        "currencyCode": "RUB",
+        "detail": {
+          "products": [
+            {
+              "id": "{{ $variant->id }}",
+              "name" : "{{ $product->name }}",
+              "price": {{ $product->variant()->price }},
+              "brand": "{{ $product->brand->name }}",
+              "category": "{{ $product->categories[0]->name }}",
+              "variant" : "{{ $variant->name }}"
+            }
+          ]
+        }
+      }
+    });
+  </script>
 
 @endsection

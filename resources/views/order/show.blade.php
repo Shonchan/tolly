@@ -19,7 +19,7 @@
                     @if($order->paid == 1)
                         {!! Form::open(['action' => 'Views\OrderController@pay', 'method' => 'post']) !!}
                             <input type="hidden" name="slug" value="{{$order->slug}}" />
-                            <p><button class="btn btn1">ОПЛАТИТЬ ЗАКАЗ ОНЛАЙН</button></p>
+                            <p><button class="btn btn1" onclick="yaCounter48634619.reachGoal('order_pay'); return true;">ОПЛАТИТЬ ЗАКАЗ ОНЛАЙН</button></p>
                         {!! Form::close() !!}
                     @endif
                 @endif
@@ -27,7 +27,7 @@
             <div class="ordering-delivery">
                 <h3><span>Информация о заказе</span></h3>
                 <ul>
-                    <li><span>Имя и фамилия:</span> <b>{{$order->name}}</b></li>
+                    <li><span>Имя и фамилия:</span> <b>{{$order->name}} {{$order->lastname}}</b></li>
                     <li><span>Телефон:</span> <b>{{$order->phone}}</b></li>
                     @if($order->email)<li><span>Электронная почта:</span> <b>{{$order->email}}</b></li>@endif
                     @if($order->sname == 'Новый')<li><span>Номер заказа:</span> <b>{{$order->id}}</b></li>@endif
@@ -73,7 +73,7 @@
                 @if($order->paid == 1)
                 {!! Form::open(['action' => 'Views\OrderController@pay', 'method' => 'post']) !!}
                 <input type="hidden" name="slug" value="{{$order->slug}}" />
-                <p><button class="btn btn1">ОПЛАТИТЬ ЗАКАЗ ОНЛАЙН</button></p>
+                <p><button class="btn btn1" onclick="yaCounter48634619.reachGoal('order_pay'); return true;">ОПЛАТИТЬ ЗАКАЗ ОНЛАЙН</button></p>
                 {!! Form::close() !!}
                 @endif
                 @endif
@@ -90,4 +90,5 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">window.onload = function() { yaCounter48634619.reachGoal("order_status"); }</script>
 @endsection

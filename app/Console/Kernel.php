@@ -50,13 +50,15 @@ class Kernel extends ConsoleKernel
             ->hourly();
         $schedule->command('update:karna')
             ->hourly();
-        $schedule->command('update:kazanova')
-            ->hourly();
+//        $schedule->command('update:kazanova')
+//            ->hourly();
 
-        $schedule->command('parser:kazanova')->daily();
-        $schedule->command('parser:valteri')->daily();
-        $schedule->command('parser:karna')->daily();
-        $schedule->command('parser:alvitek2')->daily();
+//        $schedule->command('parser:kazanova')->daily();
+//        $schedule->command('parser:valteri')->daily();
+//        $schedule->command('parser:karna')->daily();
+//        $schedule->command('parser:alvitek2')->daily();
+        //обновление файла всех свойств /storage/temp_properties/all_properties.html
+        $schedule->command('export:properties')->daily();
     }
 
     /**

@@ -50,12 +50,15 @@ class ParserAlvitek2 extends Command {
     ];
     private $cat_limit = [
         1 => 1499,
-        2 => 499,
-        3 => 599,
+        2 => 699,
+        3 => 799,
         4 => 599,
-        5 => 799,
-        8 => 299,
+        5 => 1999,
+        8 => 449,
         9 => 499,
+        11 => 549,
+        12 => 499,
+        15 => 749,
     ];
     private $brands_ignore = ["KAZANOV.A", "Valtery", "СайлиД", "Танго", "Хлопковый Край", "Текстиль репаблик"];
     private $categories = [
@@ -181,7 +184,7 @@ class ParserAlvitek2 extends Command {
                 $line = fgetcsv($f, 0, $this->column_delimiter);
                 $product = null;
 
-                if(is_array($line))
+                    if(is_array($line))
                     // Проходимся по колонкам строки
                     foreach($columns as $i => $col)
                     {
@@ -202,8 +205,10 @@ class ParserAlvitek2 extends Command {
                         }
                     }
 
+
                 // Импортируем этот товар
                 if( isset($this->categories[$product['category']]) ){
+
                     if( $imported_item = $this->import_item($product) )
                         $imported_items[] = $imported_item;
                 }
@@ -293,6 +298,7 @@ class ParserAlvitek2 extends Command {
     
     protected function import_item($item) {
 
+
         $imported_item = new \stdClass;
 
         // Проверим не пустое ли название и артинкул (должно быть хоть что-то из них)
@@ -310,6 +316,8 @@ class ParserAlvitek2 extends Command {
                 $product_id = $variant->product_id;
                 $variant_id = $variant->id;
                 $product = Product::find($product_id);
+                if($product->enabled == 0)
+                    return false;
             } else {
                 $variant = new Variant();
                 $product = new Product();
@@ -334,6 +342,9 @@ class ParserAlvitek2 extends Command {
             $product->brand_id = $brand->id;
         }
 
+
+
+
         // Если задана категория
         $category_id = (int) $cat_id;
         $categories_ids = array();
@@ -349,13 +360,16 @@ class ParserAlvitek2 extends Command {
                 
         //запрос на получение прайса через апи
         $params = array(
-            'type'=>'barcode',
+            'type'=>'article',
             'value'=>$variant->sku,
             'partner'=>$this->partner
-	);
+	    );
 
 	$this->client->setParams($params);
 	$prod = $this->client->makeRequest();
+
+//        print_r($prod);
+
 
 	if(isset($prod['DATA']['PRICE']))
 		$variant->price = str_replace(',', '.', str_replace(' ', '', trim($prod['DATA']['PRICE'])));
@@ -417,6 +431,8 @@ class ParserAlvitek2 extends Command {
             $imported_item->status = 'added';
         }
 
+
+//        print_r($imported_item);
         if (!empty($variant_id) && !empty($product_id)) {
 
             // Добавляем категории к товару
@@ -424,6 +440,9 @@ class ParserAlvitek2 extends Command {
 
                 $product->categories()->sync($categories_ids);
             }
+
+
+
 
             //Изображения товаров
             if (isset($item['images'])) {

@@ -41,7 +41,7 @@ class CalculatePopularity extends Command
             ->selectRaw('max(id) as max_id')
             ->first();
 
-        $date = date("Y-m-d H:i:s", strtotime('-14 days'));
+        $date = date("Y-m-d H:i:s", strtotime('-7 days'));
 //        echo $date;
         \DB::table('bonuses')
             ->where('created_at', '<', $date)

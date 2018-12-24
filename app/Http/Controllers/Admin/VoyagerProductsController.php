@@ -121,6 +121,12 @@ class VoyagerProductsController extends VoyagerBaseController
             $vid = isset($v['id']) ? $v['id'] : '';
             $v['product_id'] = $id;
             if(trim($v['sku']) != '') {
+                if(!isset($v['price']) || empty($v['price'])) {
+                    $v['price'] = 0;
+                }
+                if(!isset($v['stock']) || empty($v['stock'])) {
+                    $v['stock'] = 0;
+                }
                 $feats = json_decode($v['feats'], true);
                 unset($v['feats']);
                 $vid = Variant::updateOrCreate( [ 'sku' => $v[ 'sku' ], 'product_id' => $v[ 'product_id' ] ], $v );
@@ -277,6 +283,12 @@ class VoyagerProductsController extends VoyagerBaseController
             foreach ($variants as &$v) {
                // $vid = isset($v['id']) ? $v['id'] : '';
                 $v['product_id'] = $data->id;
+                if(!isset($v['price']) || empty($v['price'])) {
+                    $v['price'] = 0;
+                }
+                if(!isset($v['stock']) || empty($v['stock'])) {
+                    $v['stock'] = 0;
+                }
                 $vid = Variant::updateOrCreate(['sku'=>$v['sku'], 'product_id'=>$v['product_id']], $v);
                 $vid->external_id = str_pad($vid->id, 7, "0", STR_PAD_LEFT);
                 $vid->save();

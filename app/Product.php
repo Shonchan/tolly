@@ -69,6 +69,11 @@ class Product extends Model
         if(empty($img))
             $img = $this->img();
 
+        if(empty($img))
+            $img = '';
+
+//        $img = str_replace('.JPEG', '.jpg', $img);
+
         $resizePath = storage_path('app/public').DIRECTORY_SEPARATOR;
         $parts = explode('.', $img);
 
@@ -76,7 +81,8 @@ class Product extends Model
        // dd($filename);
         if (file_exists($resizePath.$filename))
             return url ('storage', $filename);
-
+        if (file_exists(str_replace('.JPEG', '.jpg',$resizePath.$filename)))
+            return url ('storage', str_replace('.JPEG', '.jpg',$filename));
 //        dd($resizePath.$img);
         if(file_exists($resizePath.$img)) {
 

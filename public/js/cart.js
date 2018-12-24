@@ -1,5 +1,8 @@
 // $(document).ready(function () {
 
+
+    var opt = 2;
+
     var pvz = [
         {'name':'Академика Янгеля «Почтальон Сервис»','address':'Москва, ул. Россошанская, 3к1Ас2','phone':'8(495)668-07-33','time':'Пн-Сб: 10:00-21:00, Вс: 10:00-20:00','howGo':'"м. Улица Академика Янгеля. Последний вагон из центра, выход на ул. Россошанская, идти до дома 3к1Ас2, где расположено отделение «Сбербанк» и «Центр Торговли». Пункт выдачи расположен на цокольном этаже. Ориентир: вход рядом с ремонтом одежды."','coords':[55.595102, 37.607254]},
         {'name':'Багратионовская «Почтальон Сервис»','address':'Москва, ул. Барклая, 8, пав. 415','phone':'8(905)599-97-39','time':'Пн-Сб: 10:00-20:00','howGo':'Ст. метро Багратионовская. Последний вагон из центра; Из стеклянных дверей налево; Идете прямо в сторону ТЦ «Горбушка». Вам нужно зайти внутрь; дойти до лестницы; Подняться на 4 этаж, павильон 425.','coords':[55.741175, 37.502678]},
@@ -37,9 +40,14 @@
         ymaps.ready(init);
         function init() {
             // Создание карты.
+            var mapw = $('div.tabs').width() - 30;
+
+            $('#map').css('width', mapw+"px");
+
             var myMap = new ymaps.Map("map", {
 
                 center: [55.76, 37.64],
+                controls: ['geolocationControl','fullscreenControl','zoomControl'],
                 zoom: 9
             });
 
@@ -52,7 +60,8 @@
 
                 // iconAnchor:   [15, 42], // point of the icon which will correspond to marker's location
 
-                iconImageOffset: [0, -40] // point from which the popup should open relative to the iconAnchor
+                iconImageOffset: [-15, -42], // point from which the popup should open relative to the iconAnchor
+                iconContentOffset: [0, -42]
             };
 
             var clusterer = new ymaps.Clusterer({
@@ -75,12 +84,12 @@
                     "<div class=\"overlaymap-price\">" +
                     "<span>" + $('input[name="delivery_price"]').val() + " руб.</span>" +
                     "<ul>" +
-                    "<li><span class=\"visa\"></span></li>" +
+                    // "<li><span class=\"visa\"></span></li>" +
                     "<li><span class=\"cash\"></span></li>" +
                     "</ul>" +
                     "</div>" +
                     "<div class=\"overlaymap-primary\">" +
-                    "<button type='button'  onclick=\"selectPoint(" + i + ")\" class=\"btn1\">Выбрать</button>" +
+                    "<button type='button'  onclick=\"selectPoint(" + i + ", 2)\" class=\"btn1\">Выбрать</button>" +
                     "</div>" +
                     "</div>" +
                     "</div>";
@@ -92,16 +101,16 @@
 
                 markers[i] = mp;
 
-                var point = '<div class="point" data-address="' + pvz[i].address.toLowerCase() + '"><div class="point-line"><b>' + pvz[i].name + ' ' + pvz[i].phone + '</b><span>' + pvz[i].address + '</span></div><div class="point-time">' + pvz[i].time + '</div><div class="point-cash"><span class="text-green">Бесплатно</span></div><div class="point-btn"><button type="button" onclick="selectPoint(' + i + ')" class="btn1">Выбрать</button></div></div>';
+                var point = '<div class="point" data-address="' + pvz[i].address.toLowerCase() + '"><div class="point-line"><b>' + pvz[i].name + ' ' + pvz[i].phone + '</b><span>' + pvz[i].address + '</span></div><div class="point-time">' + pvz[i].time + '</div><div class="point-cash">'+getDelPrice()+'</div><div class="point-btn"><button type="button" onclick="selectPoint(' + i + ', 1)" class="btn1">Выбрать</button></div></div>';
                 $('#option1 .form-content').append(point);
             }
 
             clusterer.add(markers);
             myMap.geoObjects.add(clusterer);
 
-            myMap.setBounds(clusterer.getBounds(), {
-                checkZoomRange: true
-            });
+            // myMap.setBounds(clusterer.getBounds(), {
+            //     checkZoomRange: true
+            // });
         }
 
 
@@ -216,12 +225,12 @@ function getDelPrice(){
     var delPrice = "<span class='text-green'>бесплатно</span>";
     if($('input[name="delivery_price"]').val()>0)
     {
-        delPrice = $('input[name="delivery_price"]').val() + " руб.";
+        delPrice = "<span class='text-bold'>"+$('input[name="delivery_price"]').val() + " руб.</span><div><span class='cash'></span></div>";
     }
     return delPrice;
 }
 
-function selectPoint(ind) {
+function selectPoint(ind, option) {
 
 
 
@@ -236,10 +245,16 @@ function selectPoint(ind) {
         comp.show();
 
 
+    $('div#option1').hide();
+    $('div#option2').hide();
+    $('.field2h').hide();
+    // $('div#field2').hide();
+    // opt = option;
+    // console.log('#option'+ opt);
 
     $('html, body').animate({
         scrollTop: comp.offset().top - 50
-    }, 100);
+    }, 200);
 
     $('textarea[name="comment"]').val("Точка самовывоза - "+pv.name+"\n"+pv.phone+"\n"+pv.address);
 
@@ -256,8 +271,16 @@ function setDeliveryPrice() {
         $('#delivery-price span').html($('input[name="delivery_price"]').val()+" руб.");
         $('#delivery-price span').removeClass('text-green');
     }
+    var total = parseInt($('input[name="total_sum"]').val()) - parseInt($('input[name="discount_value"]').val()) + parseInt($('input[name="delivery_price"]').val());
+    $('.order-sidebar-complete li.text-bold span').html(total+" руб.");
 }
 $(document).ready(function () {
+
+    $(window).resize(function () {
+        var mapw = $('div.tabs').width() - 30;
+
+        $('#map').css('width', mapw+"px");
+    });
 
     $('#option1 input').keyup(function () {
 
@@ -274,9 +297,14 @@ $(document).ready(function () {
     $('div.remove button').click(function (e) {
         e.preventDefault();
         $("#field2 .complete").hide()
+        // console.log('#option'+ opt);
+        $('div#option1').removeAttr("style");
+        $('div#option2').removeAttr("style");
+        $('.field2h').removeAttr("style");
+        // $('div#field2').removeAttr("style");
         $('html, body').animate({
             scrollTop: $('#field2').offset().top - 50
-        }, 100);
+        }, 200);
 
         $('textarea[name="comment"]').val('');
     });
@@ -285,6 +313,7 @@ $(document).ready(function () {
 
        if($(this).val()==3) {
            $('input[name="delivery_price"]').val($(this).data('price'));
+           $('div#field2').removeAttr("style");
        } else {
            $('input[name="delivery_price"]').val($('input[name="area"]:checked').val());
        }
@@ -292,15 +321,105 @@ $(document).ready(function () {
        setDeliveryPrice();
     });
 
+    $('input[name="payment"]').change(function () {
+
+        if($(this).val()==3) {
+
+            $('.order-sidebar-button button').text("ПЕРЕЙТИ К ОПЛАТЕ");
+        } else {
+           $('.order-sidebar-button button').text("ПОДТВЕРДИТЬ ЗАКАЗ");
+        }
+
+
+    });
+
     $('input[name="area"]').change(function () {
 
         $('input[name="delivery_price"]').val($(this).val());
         setDeliveryPrice();
+
     });
 
 
 
+    $('#store-form').change(function () {
+        var data = $(this).serializeArray();
+        var fields = 0;
+        for(var i = 0; i<data.length; i++) {
+            fields += validateField(data[i].name, data[i].value)
+        }
+        if(fields == 5) {
+            // console.log($('#store-form .order-sidebar-button button'));
+            $('#store-form .order-sidebar-button button').attr('disabled', false);
+        } else {
+            $('#store-form .order-sidebar-button button').attr('disabled', true);
+        }
+        // console.log(fields);
+    });
 
 
 
 });
+
+function validateField(name, value) {
+    if(name == 'name') {
+        if (value.length >= 2) {
+            $('#store-form input[name="name"]').closest('.form-group').removeClass('has-error');
+            return 1;
+        } else {
+            $('#store-form input[name="name"]').closest('.form-group').addClass('has-error');
+            return 0;
+        }
+    }
+    if(name == 'lastname') {
+        if (value.length >= 2) {
+            $('#store-form input[name="'+name+'"]').closest('.form-group').removeClass('has-error');
+            return 1;
+        } else {
+            $('#store-form input[name="'+name+'"]').closest('.form-group').addClass('has-error');
+            return 0;
+        }
+    }
+
+    if(name == 'phone') {
+        if (value.search(/^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/) > -1) {
+            $('#store-form input[name="'+name+'"]').closest('.form-group').removeClass('has-error');
+            return 1;
+        } else {
+            $('#store-form input[name="'+name+'"]').closest('.form-group').addClass('has-error');
+            return 0;
+        }
+    }
+
+    if(name == 'email') {
+        if (value.length > 0) {
+
+            if (value.search(/^[a-zA-Z0-9_\-\.]+@[a-zA-Z0-9_\-\.]+\.[a-zA-Z]{2,5}$/) > -1) {
+                $('#store-form input[name="' + name + '"]').closest('.form-group').removeClass('has-error');
+                return 0;
+            } else {
+                $('#store-form input[name="' + name + '"]').closest('.form-group').addClass('has-error');
+                return -1;
+            }
+
+        }
+        return 0;
+    }
+
+    if(name == 'delivery') {
+        if(value.length > 0) {
+          return 1;
+        }
+        return 0;
+    }
+
+    if(name == 'payment') {
+        if(value.length > 0) {
+            return 1;
+        }
+        return 0;
+    }
+
+
+    return 0;
+}

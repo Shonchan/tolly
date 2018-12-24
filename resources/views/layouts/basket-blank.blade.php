@@ -33,7 +33,7 @@
     var vid = {{$variant->id}};
     var newid, price, stock, name, ex_id;
     options = {!! json_encode($variants) !!};
-    $('.select-single').selectize({
+    var sels = $('.select-single').selectize({
         valueField: 'id',
         labelField: 'name',
         placeholder: 'Выберите ваш вариант',
@@ -86,22 +86,33 @@
                     '</div>' +
                     '<div class="text">' +
                     '<span class="name">' + escape(item.name) + '</span>' +
-                    '<span class="price" data-stock="'+item.stock+'" data-price="'+item.price+'">' + price + '</span>' +
+                    '<span class="price" data-stock="'+item.stock+'" data-price="'+item.price+'">' + price + ' руб.</span>' +
                     '</div>' +
                     '</div>';
             }
         }
     });
 
+    if(sels[0]) {
+        var sels1 = sels[0].selectize;
+        sels1.setValue(vid);
+    }
+
     $('.blank-color div.submit button').click(function () {
         var vinput = $("input[name='variants[id][]'][value="+vid+"]").val(newid);
         var amount = vinput.closest('.basket-item').find("input[name='variants[amount][]']").val();
-        if(amount > stock)
-           amount = stock;
+        if(amount >= stock) {
+            amount = stock;
+            vinput.closest('.basket-item').find('span.plus').addClass('disabled');
+        } else {
+            vinput.closest('.basket-item').find('span.plus').removeClass('disabled');
+        }
+
         vinput.closest('.basket-item').find("input[name='variants[amount][]']").val(amount);
-        vinput.closest('.basket-item').find("input[name='variants[amount][]']").attr('max', stock);
+        vinput.closest('.basket-item').find("input[name='variants[amount][]']").data('max', stock);
+        vinput.closest('.basket-item').find('div.count').text(amount);
         vinput.closest('.basket-item').find('.basket-type a').text(name);
-        vinput.closest('.basket-item').find('span.price > span').html(price+" руб.");
+        vinput.closest('.basket-item').find("input[name='variants[price][]']").val(price);
         vinput.closest('.basket-item').find('.basket-type a').html(name);
         vinput.closest('.basket-item').find('.basket-total span').text(amount*price + " руб.");
 
@@ -114,12 +125,12 @@
         var total_price = 0;
         var cart = {};
 
-        $('.spinner').each(function ()
+        $('input[name="variants[amount][]"]').each(function ()
         {
-            var variant_id = $(this).closest('.basket-item').find('div.basket-price input').val();
+            var variant_id = $(this).closest('.basket-item').find("input[name='variants[id][]']").val();
             cart[variant_id]= parseInt($(this).val());
             total += parseInt($(this).val());
-            total_price += parseInt($(this).closest('.basket-item').find('.basket-total > span').html());
+            total_price += parseInt($(this).closest('.basket-item').find('.basket-total > span').text());
         });
 
         Cookies.set('shopping_cart', cart, {

@@ -63,7 +63,7 @@
         <form id="filter" class="category-page">
             <input type="hidden" name="page" value="1">
             <input type="hidden" name="sort" value="popular">
-            <input type="hidden" name="category" value="{{ $category_id }}">
+            <input type="hidden" name="category" value="{{ $category->id }}">
             <h3>Фильтр</h3>
             <div class="filter-collapse">
                 <div class="filter-collapse-name current">Цена, руб.</div>
@@ -73,14 +73,14 @@
                             <div class="price-slider"></div>
                         </div>
                         <div class="filter-price-item">
-                            <label for="to">от</label>
                             <div class="control">
+                                <label for="to">от</label>
                                 <input name="min_price" type="text" value="{{ $max_min_price->min_price }}" id="lower_bound">
                             </div>
                         </div>
                         <div class="filter-price-item">
-                            <label for="to">до</label>
                             <div class="control">
+                                <label for="to">до</label>
                                 <input name="max_price" type="text" value="{{ $max_min_price->max_price }}" id="upper_bound">
                             </div>
                         </div>
@@ -90,8 +90,8 @@
 
             @foreach ($features as $f)
                 <div class="filter-collapse">
-                    <div class="filter-collapse-name">{{ $f->name }}</div>
-                    <div class="filter-collapse-hide">
+                    <div class="filter-collapse-name current">{{ $f->name }}</div>
+                    <div class="filter-collapse-hide current">
                         <div class="nano">
                             <div class="nano-content">
                                 <ul class="filter-menu">

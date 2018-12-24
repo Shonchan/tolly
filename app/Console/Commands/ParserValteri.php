@@ -111,14 +111,17 @@ class ParserValteri extends Command {
         'country' => [22,34,50,61,78,139,90,103,113,127,149],
         'filler' => [29,43],
     ];
-    protected $cat_limit = [
+    private $cat_limit = [
         1 => 1499,
-        2 => 499,
-        3 => 599,
+        2 => 699,
+        3 => 799,
         4 => 599,
         5 => 799,
-        8 => 299,
+        8 => 449,
         9 => 499,
+        11 => 549,
+        12 => 499,
+        15 => 749,
     ];
     protected $column_names = [
         'cat_id' => 'category',
@@ -186,6 +189,8 @@ class ParserValteri extends Command {
                 $product_id = $variant->product_id;
                 $variant_id = $variant->id;
                 $product = Product::find($product_id);
+                if($product->enabled == 0)
+                    return false;
             } else {
                 $variant = new Variant();
                 $product = new Product();

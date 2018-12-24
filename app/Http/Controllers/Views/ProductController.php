@@ -152,6 +152,25 @@ class ProductController extends Controller
 
 
         foreach ($products as &$p){
+            
+            $opts = \DB::table('options as o')
+            ->leftJoin('features as f', 'f.id', '=', 'o.feature_id')
+            ->selectRaw('f.id as feature_id, f.name, o.value, o.product_id')
+            ->where('f.in_catalog', '=', 1)
+            ->where('o.product_id', '=', $p->id)
+            ->orderBy('f.position', 'asc')->get();
+
+            $options = [];
+            foreach ( $opts as $opt ) {
+                if(isset($options[$opt->feature_id])) {
+                    $options[ $opt->feature_id ]->values[] = $opt->value;
+                } else {
+                    $options[ $opt->feature_id ] = $opt;
+                    $options[ $opt->feature_id ]->values = (array)$opt->value;
+                }
+            }
+            $p->options = $options;
+            
             $p->imgs = json_decode($p->images);
             if($p->imgs)
                 $p->img = $this->imgSize(320, 200, $p->imgs[0]);
@@ -263,6 +282,23 @@ class ProductController extends Controller
 //        });
 
         foreach ($products as &$p){
+            $opts = \DB::table('options as o')
+            ->leftJoin('features as f', 'f.id', '=', 'o.feature_id')
+            ->selectRaw('f.id as feature_id, f.name, o.value, o.product_id')
+            ->where('f.in_catalog', '=', 1)
+            ->where('o.product_id', '=', $p->id)
+            ->orderBy('f.position', 'asc')->get();
+
+            $options = [];
+            foreach ( $opts as $opt ) {
+                if(isset($options[$opt->feature_id])) {
+                    $options[ $opt->feature_id ]->values[] = $opt->value;
+                } else {
+                    $options[ $opt->feature_id ] = $opt;
+                    $options[ $opt->feature_id ]->values = (array)$opt->value;
+                }
+            }
+            $p->options = $options;
             $p->imgs = json_decode($p->images);
             if($p->imgs)
                 $p->img = $this->imgSize(320, 200, $p->imgs[0]);
@@ -280,16 +316,22 @@ class ProductController extends Controller
         if(empty($img))
             return false;
 
+//        $img = str_replace('.JPEG', '.jpg', $img);
+
+
         $resizePath = storage_path('app/public').DIRECTORY_SEPARATOR;
         $parts = explode('.', $img);
         $filename = $parts[0].$width.'x'.$height.'.'.$parts[1];
-        if (file_exists($resizePath.$filename))
-            return url ('storage', $filename);
+        if (file_exists($resizePath.$filename)) {
+
+            return url( 'storage', $filename );
+        }
 
         if(file_exists($resizePath.$img)) {
 
             $image = \Image::make( $resizePath . $img )->fit( $width, $height );
             $image->save( $resizePath . $filename );
+//            \Debugbar::info(url( 'storage', $filename ));
 
         } else {
             return false;
@@ -371,7 +413,11 @@ class ProductController extends Controller
             return response()->view('errors.404', compact(['url']), '404');
         }
         $product->images = json_decode($product->images);
-        $product->image = $product->images[0];
+        if(isset($product->images[0])) {
+            $product->image = $product->images[ 0 ];
+        } else {
+            $product->image = '';
+        }
 
         $opts = \DB::table('options as o')
             ->leftJoin('features as f', 'f.id', '=', 'o.feature_id')
@@ -514,7 +560,7 @@ class ProductController extends Controller
 //        \Debugbar::info($variant);
 
         //отзывы
-        $reviews = \App\Review::where('product_id', '=', $product->id)->where('moderated', '=', 1)->get();
+        $reviews = \App\Review::where('product_id', '=', $product->id)->where('moderated', '=', 1)->orderBy('id', 'DESC')->get();
 
         //варианты
         $vars = $product->get_variants();
@@ -525,6 +571,7 @@ class ProductController extends Controller
             $var->name = $v->name;
             $var->stock = $v->stock;
             $var->price = $v->price." руб.";
+            $var->compare_price = $v->compare_price;
             $var->imageUrl =  $this->imgSize(320, 200, $product->image);
             $variants[] = $var;
         }

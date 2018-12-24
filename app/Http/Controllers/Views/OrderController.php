@@ -17,6 +17,22 @@ class OrderController extends Controller
 {
 
     protected $productController;
+
+    private $months =  [
+        "01" => "января",
+        "02" => "февраля",
+        "03" => "марта",
+        "04" => "апреля",
+        "05" => "мая",
+        "06" => "июня",
+        "07" => "июля",
+        "08" => "августа",
+        "09" => "сентября",
+        "10" => "октября",
+        "11" => "ноября",
+        "12" => "декабря"
+    ];
+
     public function __construct(ProductController $productController)
     {
         $this->productController = $productController;
@@ -25,6 +41,9 @@ class OrderController extends Controller
     public function cart()
     {
         $cart = null;
+        $vids = [];
+        $total = 0;
+        $discountValue = 0;
         if(isset($_COOKIE['shopping_cart'])) {
 //            \Debugbar::info($_COOKIE[ 'shopping_cart' ]);
             $cart = json_decode( $_COOKIE[ 'shopping_cart' ] );
@@ -45,9 +64,13 @@ class OrderController extends Controller
 
             $images = [];
             foreach ($imgs as $i){
-                $images[$i->id] = json_decode($i->images)[0];
+                if(isset(json_decode($i->images)[0]))
+                 $images[$i->id] = json_decode($i->images)[0];
+                 else
+                     $images[$i->id] = "";
             }
 
+            $vids = [];
             foreach ($variants as &$v) {
                 $vid = $v->id;
                 $v->amount = $cart->$vid;
@@ -56,6 +79,7 @@ class OrderController extends Controller
                     $v->amount = $v->stock;
                 $total += $v->amount*$v->price;
                 $total_amount += $v->amount;
+                $vids[] = $vid;
 //                \Debugbar::info($total);
             }
 
@@ -86,11 +110,11 @@ class OrderController extends Controller
 
 
 
-        $dateDelivery = $date->format('j F');
+        $dateDelivery = $this->ru_month($date->format('j m'));
 
 
 
-        return view('order.cart', compact(['cart', 'variants', 'total', 'total_amount', 'discountValue', 'couponeCode', 'freeDelivery', 'dateDelivery']));
+        return view('order.cart', compact(['cart', 'variants', 'total', 'total_amount', 'discountValue', 'couponeCode', 'freeDelivery', 'dateDelivery', 'vids']));
     }
 
     public function create(Request $request)
@@ -111,17 +135,22 @@ class OrderController extends Controller
 
        $variants = [];
         foreach ( $vars as $variant ) {
-            $variants[$variant->id] = $variant;
-            $variants[$variant->id]->image = $this->productController->imgSize(320, 200, $images[$variant->id]);
+
+                $variants[ $variant->id ] = $variant;
+                $variants[ $variant->id ]->image = $this->productController->imgSize( 320, 200, $images[ $variant->id ] );
+
        }
        $total_amount = 0;
        $total_sum = 0;
        foreach ($purchases['id'] as $k=>$v) {
            if($purchases['amount'][$k] > $variants[$v]->stock)
                $purchases['amount'][$k] = $variants[$v]->stock;
+
            $total_amount += $purchases['amount'][$k];
            $total_sum += $purchases['amount'][$k]*$variants[$v]->price;
            $variants[$v]->amount = $purchases['amount'][$k];
+           if($variants[$v]->stock == 0)
+               unset($variants[$v]);
        }
 
        $discountValue = 0;
@@ -144,7 +173,7 @@ class OrderController extends Controller
 
         $date = Carbon::now();
         $date->addHours(12)->addMinutes(20)->addDay();
-        $dateDelivery = $date->format('j F');
+        $dateDelivery = $this->ru_month($date->format('j m'));
 
 
         return view('order.create', compact(['variants', 'total_amount', 'total_sum', 'pay_methods', 'del_methods', 'discountValue', 'freeDelivery', 'dateDelivery']));
@@ -163,28 +192,44 @@ class OrderController extends Controller
 
         $validator = \Validator::make($request->all(), [
             'name' => 'required',
-
-            'phone' => 'required',
+            'lastname' => 'required',
+            'phone' => 'required|regex:/^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/',
+            'email' => 'nullable|email',
+        ],
+        [
+            'phone.regex'=> 'Укажите полный номер телефона',
+            'email.email'=> 'Укажите корректный email',
+//            'name.required'=> 'Укажите имя',
+//            'lastname.required'=> 'Укажите фамилию',
         ]);
 
         if ($validator->fails()) {
-            return redirect('/cart')
-                ->withErrors($validator)
-                ->withInput();
+            $errors = $validator->errors();
+
+            return response()->json([
+                'validate_error'=>true,
+                'validate_phone_message' => $errors->first('phone'),
+                'validate_email_message' => $errors->first('email'),
+//                'validate_name_message' => $errors->first('name'),
+//                'validate_lastname_message' => $errors->first('lastname'),
+//                'errors'=> $errors
+            ]);
+
         }
 
         $delivery = Delivery::where('id', '=', $request->get('delivery_method_id'))->first();
 
         $data = $request->all();
 
-        $fio = explode(' ', $data['name']);
-        $firstname = $fio[0] ?? '';
-        $lastname = $fio[1] ?? '';
-        $patronymic = $fio[2] ?? '';
+//        $fio = explode(' ', $data['name']);
+        $firstname = $data['name'] ?? '';
+        $lastname = $data['lastname'] ?? '';
+        $patronymic = '';
 
         //ищем клиента по номеру телефона в crm
         $phone = Order::formatPhoneToNumber($data['phone']);
-        $client = $crm->table('clients')->where('phone', 'LIKE', $phone)->first();
+        $client = $crm->table('clients')->where('phone', '=', $phone)->first();
+
         //если не найден
         if(!$client){
            $crm->table('clients')->insert(
@@ -195,24 +240,26 @@ class OrderController extends Controller
                     'phone' => $phone
                 ]
             );
-           $client = $crm->table('clients')->where('phone', 'LIKE', $phone)->first();
+           $client = $crm->table('clients')->where('phone', '=', $phone)->first();
         }
 
         $order = new Order();
-        $order->name = $data['name'];
+        $order->name =  $data['name'];
+        $order->lastname =  $data['lastname'];
         $order->address  = implode(' ', array_values($data['address']));
         $order->phone = $data['phone'];
         $order->email = $data['email'];
         $order->comment = $data['comment'];
-        if($data['recipient'])
-            $order->comment .= "\nПолучатель: ".$data['recipient'];
+//        if($data['recipient'])
+//            $order->comment .= "\nПолучатель: ".$data['recipient'];
         $order->status = 1;
         $order->slug = md5(microtime());
 //        $order->ip = ;
         $order->total_price = $data['total_sum'];
-        $order->payment_method_id = $data['payment'];
-        $order->delivery_id = $data['delivery'];
+        $order->payment_method_id = $data['payment'] ?? "";
+        $order->delivery_id = $data['delivery'] ?? "";
         $order->delivery_price =  $data['delivery_price'];
+        $order->client_id =  $client->id;
 
         $order->save();
 
@@ -278,9 +325,7 @@ class OrderController extends Controller
         \Cookie::queue(\Cookie::forget('shopping_cart'));
         \Cookie::queue(\Cookie::forget('coupone'));
 
-        return redirect(url('order', ['hash'=>$order->slug]));
-
-
+        return response()->json(['url'=>url('order', ['hash'=>$order->slug])]);
 
     }
     
@@ -482,9 +527,9 @@ class OrderController extends Controller
 
         $cook = \Cookie::get('shopping_cart');
 
-        //если корзина не пуста и не пуст код купона
-        if(!empty($cook) && !empty($couponeCode)) {
 
+
+        if(!empty($cook)){
             $cart = json_decode( $cook );
 
             $ids = array_keys((array)$cart);
@@ -492,13 +537,21 @@ class OrderController extends Controller
             $variants = Variant::whereIn('id', $ids)->get();
 
             foreach ($variants as &$v) {
-               $vid = $v->id;
-               $v->amount = $cart->$vid;
+                $vid = $v->id;
+                $v->amount = $cart->$vid;
                 if($v->amount > $v->stock)
                     $v->amount = $v->stock;
                 $total += $v->amount*$v->price;
                 $total_amount += $v->amount;
+
             }
+        }
+
+
+        //если корзина не пуста и не пуст код купона
+        if(!empty($cook) && !empty($couponeCode)) {
+
+
 
             $coupone = Coupons::where('code', '=', $couponeCode)->first();
 
@@ -514,16 +567,19 @@ class OrderController extends Controller
                 $result['error'] = true;
                 $result['view'] =   view('layouts.basket-coupon', compact(['total', 'total_amount', 'discountValue']))->render();
                 $result['message'] = 'Купон не найден';
+                \Cookie::queue(\Cookie::forget('coupone'));
             }
 
         }
 
-        if(empty($couponeCode)){
+        if(empty($couponeCode) || $couponeCode == ''){
             $result['error'] = true;
+            $result['view'] =   view('layouts.basket-coupon', compact(['total', 'total_amount', 'discountValue']))->render();
             $result['message'] = 'Введите купон';
+            \Cookie::queue(\Cookie::forget('coupone'));
         }
 
-        return response()->json($result);
+        return response()->json($result)->header('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 
     }
 
@@ -573,10 +629,10 @@ class OrderController extends Controller
 
         $freeDelivery = 3000;
         $date = Carbon::now();
-        $dateDelivery = $date->addHours(12)->addMinutes('20')->addDay()->format('j F');
+        $dateDelivery = $this->ru_month($date->addHours(12)->addMinutes('20')->addDay()->format('j m'));
 
         $data = view('layouts.basket-sidebar', compact(['total', 'total_amount', 'discountValue', 'couponeCode', 'freeDelivery', 'dateDelivery']))->render();
-        return response()->json($data);
+        return response()->json($data)->header('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 
 //        return response()->json([
 //            'discount'    => $discountValue
@@ -783,10 +839,13 @@ class OrderController extends Controller
 
     public function by_one_click(Request $request){
 
+        //коннект к БД CRM
+        $crm = \DB::connection('crm');
+
         $data = $request->all();
         $validator = \Validator::make($data, [
             'name'  => 'required',
-            'phone' => 'required|min:17',
+            'phone' => 'required|regex:/^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/',
             'count' => 'required',
             'vid'   => 'required',
         ],
@@ -804,6 +863,28 @@ class OrderController extends Controller
             ]);
         }
 
+        //ищем клиента по номеру телефона в crm
+        $phone = Order::formatPhoneToNumber($data['phone']);
+        $client = $crm->table('clients')->where('phone', '=', $phone)->first();
+
+        $fio = preg_split('/\s+/', $data['name']);
+        $firstname = $fio[0] ?? '';
+        $lastname = $fio[1] ?? '';
+        $patronymic = $fio[2] ?? '';
+
+        //если не найден
+        if(!$client){
+           $crm->table('clients')->insert(
+                [
+                    'firstname' => $firstname,
+                    'lastname' => $lastname,
+                    'patronymic' => $patronymic,
+                    'phone' => $phone
+                ]
+            );
+           $client = $crm->table('clients')->where('phone', '=', $phone)->first();
+        }
+
         $variant = Variant::where('id', $data['vid'])->first();
         $product = \App\Product::where('id', $variant->product_id)->first();
 
@@ -814,6 +895,7 @@ class OrderController extends Controller
         $order->status = 1;
         $order->total_price = $variant->price * $data['count'];
         $order->slug = md5(microtime());
+        $order->client_id =  $client->id;
         $order->save();
 
         $purchase = new Purchase();
@@ -835,6 +917,13 @@ class OrderController extends Controller
             ]);
         }
 
+    }
+
+    private function ru_month($date)
+    {
+        $part = explode(' ', $date);
+        $part[1] = $this->months[$part[1]];
+        return implode(' ', $part);
     }
 
 }

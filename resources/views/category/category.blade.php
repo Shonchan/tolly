@@ -2,15 +2,15 @@
 
 @section('title')
 @if(isset($mark))
-@if($mark->meta_title){{ $mark->meta_title }}@else{{ $mark->name }}{{' в Москве: купить в интернет-магазине TOLLY.ru'}}@endif
+@if($mark->meta_title){{ $mark->meta_title }}@else{{ 'Купить' }} {{ mb_lcfirst($mark->name) }}{{' в Москве | TOLLY.ru'}}@endif
 @else
-@if($category->meta_title){{ $category->meta_title }}@else{{ $category->name }}{{' в Москве: купить в интернет-магазине TOLLY.ru'}}@endif
+@if($category->meta_title){{ $category->meta_title }}@else{{ 'Купить' }} {{ mb_lcfirst($category->name) }}{{' в Москве в интернет-магазине TOLLY.ru'}}@endif
 @endif
 @endsection
 
 @section('description')
 @if(isset($mark))
-@if($mark->meta_description){{ $mark->meta_description }}@else{{ $mark->name }}{{' по цене от '}}{{ $max_min_price->min_price }}{{' руб. Большой каталог из 2000 моделей. Покупай, доставим по Москве от 1 дня!'}}@endif
+@if($mark->meta_description){{ $mark->meta_description }}@else{{ $mark->name }}{{' от '}}{{ $max_min_price->min_price }}{{' рублей в интернет-магазине Москвы. Выбрать и купить из'}} {{ $products->total() }} {{ plural($products->total(), ["товар","товаров", "товаров"]) }} {{'с доставкой от 1 дня!'}}@endif
 @else
 @if($category->meta_description){{ $category->meta_description }}@else{{ $category->name }}{{' по цене от '}}{{ $max_min_price->min_price }}{{' руб. Большой каталог из 2000 моделей. Покупай, доставим по Москве от 1 дня!'}}@endif
 @endif
@@ -27,7 +27,7 @@
 @section('canonical')@if(isset($mark)){{ url($mark->slug) }}@else{{ url($category->slug) }}@endif
 @endsection
 
-@section('ogtitle')@if(isset($mark)){{ $mark->name }}{{' в Москве'}}@else{{ $category->name }}{{' в Москве'}}@endif
+@section('ogtitle')@if(isset($mark)){{ $mark->name }}{{' в интернет-магазине TOLLY.ru'}}@else{{ $category->name }}{{' в интернет-магазине TOLLY.ru'}}@endif
 @endsection
 
 @section('ogdescription')
@@ -73,15 +73,19 @@
   @include('layouts.filter')
   <div class="product">
     @if(isset($marks) && count($marks)>0)
-    <div class="product-tag">
+    <ul class="product-tag">
       @foreach ($marks as $m)
-      @if(isset($mark) && $m->id == $mark->id)
-      <span class="active">@if($m->seo[0]){{ $m->seo[0] }}@else{{ $m->name }}@endif</span>
-      @else
-      <a href="{{ url($m->slug) }}">@if($m->seo[0]){{ $m->seo[0] }}@else{{ $m->name }}@endif</a>
-      @endif
+          <li>
+              @if(isset($mark) && $m->id == $mark->id)
+                  <span class="active">@if($m->seo[0]){{ $m->seo[0] }}@else{{ $m->name }}@endif</span>
+              @else
+                  <a href="{{ url($m->slug) }}">@if($m->seo[0]){{ $m->seo[0] }}@else{{ $m->name }}@endif</a>
+              @endif
+          </li>
+
       @endforeach
-    </div>
+          <li class="open"><a href="javascript:;">еще &gt;</a></li>
+    </ul>
     @endif
     <div class="product-head">
       <div class="filter-mobile">Фильтр</div>
@@ -121,12 +125,12 @@
           </a>
         </div>
         <div class="pc-data">
-          <div class="pc-name"><a data-id="{{ $p->id }}" rel="nofollow" href="{{ url('/product', $p->vid) }}" target="_blank"><span itemprop="name">{{ $p->name }}@if($p->seo){{ $p->vname }}<span>, {{ $p->seo }}</span>@else{{ $p->vname }}@endif</span></a></div>
+          <div class="pc-name"><a data-id="{{ $p->id }}" rel="nofollow" href="{{ url('/product', $p->vid) }}" target="_blank"><span itemprop="name">{{ $p->name }}@if($p->seo) <span>{{ $p->vname }}, {{ $p->seo }}</span>@else <span>{{ $p->vname }}</span>@endif</span></a></div>
           <div class="pc-desc" itemprop="description">
             <ul>
-              {{--<li><span>Производитель:</span><i>KAZANOV.A</i></li>--}}
-              {{--<li><span>Коллекция:</span><i>Dela Rose (антрацит) цветы</i></li>--}}
-              {{--<li><span>Размер:</span><i>1.5 спальный</i></li>--}}
+              @foreach($p->options as $option)
+              <li><span>{{$option->name}}</span><i>{{$option->value}}</i></li>
+              @endforeach
             </ul>
           </div>
           <div class="pc-content" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -148,10 +152,12 @@
       {{--</div>--}}
     </div>
     @if(isset($mark))
-    <p>Выбрать и недорого купить @if(isset($mark->seo[1])){{ mb_lcfirst($mark->seo[1]) }}@else{{ mb_lcfirst($mark->name) }}@endif в интернет магазине TOLLY вам помогут подробные характеристики, цены, фото и отзывы покупателей. В каталоге вы найдете @if(isset($mark->seo[2])){{ mb_lcfirst($mark->seo[2]) }}@else{{ mb_lcfirst($mark->name) }}@endif по цене от {{ $max_min_price->min_price }} рублей. Заказ можно оформить онлайн или по телефону 8 (495) 120-90-83. В наличии {{ $products->total() }} {{ plural($products->total(), ["товар","товаров", "товара"]) }} с доставкой по Москве от 1 дня! Возможен самовывоз из 31 пунктов.</p>
+    <h2>Как выбрать и купить @if(isset($mark->seo[1])){{ mb_lcfirst($mark->seo[1]) }}@else{{ mb_lcfirst($mark->name) }}@endif в Москве</h2>
+    <p>Выбрать и купить @if(isset($mark->seo[1])){{ mb_lcfirst($mark->seo[1]) }}@else{{ mb_lcfirst($mark->name) }}@endif недорого в интернет магазине TOLLY вам помогут подробные характеристики, цены, фото и отзывы покупателей. В каталоге вы найдете @if(isset($mark->seo[2])){{ mb_lcfirst($mark->seo[2]) }}@else{{ mb_lcfirst($mark->name) }}@endif по цене от {{ $max_min_price->min_price }} рублей. Заказ можно оформить онлайн или по телефону 8 (495) 120-90-83. В наличии {{ $products->total() }} {{ plural($products->total(), ["товар","товаров", "товара"]) }} с доставкой по Москве от 1 дня! Возможен самовывоз из 31 пунктов.</p>
     @endif
     @if(!isset($mark))
-    <p>Выбрать и недорого купить @if(isset($category->seo[1])){{ mb_lcfirst($category->seo[1]) }}@else{{ mb_lcfirst($category->name) }}@endif в интернет магазине TOLLY вам помогут подробные характеристики, цены, фото и отзывы покупателей. В каталоге вы найдете @if(isset($category->seo[2])){{ mb_lcfirst($category->seo[2]) }}@else{{ mb_lcfirst($category->name) }}@endif по цене от {{ $max_min_price->min_price }} рублей. Заказ можно оформить онлайн или по телефону 8 (495) 120-90-83. В наличии {{ $products->total() }} {{ plural($products->total(), ["товар","товаров", "товара"]) }} с доставкой по Москве от 1 дня!</p>
+    <h2>Как выбрать и купить @if(isset($category->seo[1])){{ mb_lcfirst($category->seo[1]) }}@else{{ mb_lcfirst($category->name) }}@endif в Москве</h2>
+    <p>В интернет-магазине TOLLY.ru можно подобрать и купить @if(isset($category->seo[1])){{ mb_lcfirst($category->seo[1]) }}@else{{ mb_lcfirst($category->name) }}@endif благодаря подробным характеристикам, выгодной цене, детальным фото и честным отзывам покупателей. В каталоге вы найдете @if(isset($category->seo[2])){{ mb_lcfirst($category->seo[2]) }}@else{{ mb_lcfirst($category->name) }}@endif по цене от {{ $max_min_price->min_price }} рублей. Заказ можно оформить онлайн или по телефону 8 (495) 120-90-83. В наличии {{ $products->total() }} {{ plural($products->total(), ["товар","товаров", "товара"]) }} с доставкой по Москве от 1 дня!</p>
     @endif
   </div>
     {!! Form::open(['id' => 'add_to_cart']) !!}
@@ -170,26 +176,27 @@
                     </div>
                 </div>
                 <div class="basket-spinner">
-                    <input type="text" class="spinner_one" name="variants[amount][]" value="0">
-                    <div class="basket-price">
-                        {!! Form::hidden('variants[id][]', 0) !!}
-                        {!! Form::hidden('price', 0) !!}
-                        <span class="price"><u>Цена: </u>{{ "0 руб/шт" }}</span>
+                    {!! Form::hidden('variants[id][]', 0) !!}
+                    {!! Form::hidden('variants[price][]', 0) !!}
+                    {!! Form::hidden('variants[amount][]', 0, ['data-max'=>20]) !!}
+                    <div class="ui-spin">
+                        <span class="minus" onclick=""></span>
+                        <div class="count">0</div>
+                        <span class="plus" onclick=""></span>
                     </div>
+                    <div class="cost"></div>
                 </div>
-                <div class="basket-total"><u>Итого: </u><span>{{ "0 руб." }}</span></div>
+                <div class="basket-total"><span>{{ "0 руб." }}</span></div>
                 <div class="basket-remove"></div>
             </div>
             <div class="blank-more">
-                {{--<div class="blank-content articles">--}}
-                {{--<a href="javascript:;">В корзине 2 товара</a> на сумму 8200 рублей--}}
-                {{--</div>--}}
                 <div class="blank-submit">
                     <a href="javascript:;"  onclick="$.fancybox.close();" class="btn btn2">Продолжить покупки</a>
                     <a href="{{ url('cart') }}" class="btn btn3">Перейти в корзину</a>
                 </div>
             </div>
         </div>
+
 
     </div>
     {!! Form::close() !!}

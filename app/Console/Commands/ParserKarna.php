@@ -35,6 +35,200 @@ class ParserKarna extends Command
 
     protected $provider_id = 4;
 
+    protected $manufactures = [
+        "Bilge ev tekstil san.ve,tic.ltd/ Турция,Istanbul,Mesıh Pasa Cad.Kiziltas Sok. No:26/2-3 Laleli-Fatih" =>	"KARNA",
+        "Bulsan ic dis tic ltd" =>	"BUSLAN",
+        "Kayteks kadife san.tic.ltd./ Турция,Denizli Hurriyet Mah.Haci Kandak Cad. No:49 P.K.4 Kayihan" =>	"Acelya",
+        "Cetin Tekstil/ Veysel karani Mh. cestepe sk No: 11 Osmangazi/Bursa/Турция" =>	"BIRHOME",
+        "Uc Koc tekstil san.tic.ltd/ Турция,Denizli Carsi Mah.Carsi Cad. No:27-29 Buldan" =>	"PUPILLA",
+        "Gonca tekstil san.tic.ltd.sti/ Турция,Denizli Pamukkale V.D. 396 005 9683." =>	"GONCA",
+        "Ms Tekstil Kon. San. Tic. Ldt. Sti Akhan Mah. 19 Mayıs Cad. No:20 Akkale/ Denizli/Турция" =>	"IRYA",
+        "Altinbasak tekstil san.ve.tic.a.s./ Турция,Denizli,Organize Sanayi Bolgesi Turan Bahadir Cad. No:28 " =>	"ALTINBASAK",
+        "Befasa Tekstil Kon.San.Tic. / Beyazıt mahallesi, Güler Sokak No:28 Yıldırım/Bursa" =>	"FINEZZA",
+        "Ilk-On tekstil / Trakya Serbest Bolgesi 18 K. Baeta 573 Ad:6 Parsel Catalca Istanbul/Турция" =>	"LE VELE"
+    ];
+
+
+    protected $categories_filter = [
+        "Пододеяльник - наволочки" => [
+           "option" => [ "Размер-для-сайта" => [
+                    [
+                       "values"=>["Пододеяльник" => 10,
+                           "Подушки" => 8,
+                           "2 спальный" => 11,
+                           "Простынь" => 11,
+                       ],
+                    ],
+                ],
+               ],
+        ],
+        "Одеяла и подушки/LE VELE" => [
+           "option" => ["Размер-для-сайта" =>[
+                    [
+                       "values"=>[
+                           "70х70 см" => 2,
+                           "195х215 см" => 3,
+                           "155x215 см" => 3,
+                           ],
+                    ],
+
+               ],
+           ],
+
+        ],
+        "Одеяла и подушки/KARNA" => [
+           "option" => ["Размер-для-сайта"=>[
+                        [
+                           "values"=>[
+                               "Подушки" => 2,
+                               "Одеяло" => 3
+                           ],
+                        ],
+                   ],
+               ],
+
+        ],
+        "Для детей" => [
+            "option" => [
+                    "Размер наволочек"=>[
+                        [
+                            "values"=>["35x45+5 см*2" => 1],
+                        ],
+                    ],
+                    "Размер-для-сайта"=>[
+                        [
+                            "values"=>["2 предмета комплект" => 91],
+                            "defName" => "Комплект полотенец детский",
+                        ],
+                    ],
+
+                ],
+
+        ],
+        "Полотенца" => [
+            "option" => ["Количество полотенец"=>[
+                        [
+                            "values"=> [
+                                "6 шт" => 91,
+                                "4 шт" => 91,
+                            ],
+                            "defName" => "Комплект полотенец",
+                        ],
+                    ],
+                ],
+
+
+        ],
+        "Чехлы" => [
+            "option" => ["Вес единицы"=>[
+                            [
+                                "values" => [
+                                    "1,025" => 92,
+                                    "1,05" => 92,
+                                    "1,405" => 92,
+                                    "1,785" => 92,
+                                ],
+                                "defName" => "Чехол на диван двухместный",
+                                "feats" => [
+                                    162 => "Диван двухместный",
+                                ],
+
+                            ],
+                            [
+                                "values"=> [
+                                    "1,616" => 92,
+                                    "1,63" => 92,
+                                    "1,75" => 92,
+                                    "1,79" => 92,
+                                    "2,255" => 92,
+                                ],
+                                "defName" => "Чехол на диван трехместный",
+                                "feats" => [
+                                    162 => "Диван трехместный",
+                                ],
+                            ],
+                            [
+                                "values"=> [
+                                    "3,473" => 92,
+                                    "3,9" => 92,
+                                    "3,92" => 92,
+                                    "4,46" => 92,
+                                ],
+                                "defName" => "Набор чехлов для дивана 3+1+1",
+                                "feats" => [
+                                    162 => "Набор диван и 2 кресла",
+                                ],
+                            ],
+                            [
+                                "values"=> [
+                                    "0,9" => 92,
+                                    "0,96" => 92,
+                                    "0,966" => 92,
+                                    "1" => 92,
+                                    "1,305" => 92,
+                                ],
+                                "defName" => "Чехол на кресло",
+                                "feats" => [
+                                    162 => "Кресло",
+                                ],
+                            ],
+                            [
+                                "values"=> [
+                                    "0,403" => 92,
+                                    "0,515" => 92,
+                                    "0,85" => 92,
+                                ],
+                                "defName" => "Чехол на стул набор 2 штуки",
+                                "feats" => [
+                                    162 => "Стул",
+                                ],
+                            ],
+                    ],
+
+                     "name" => [
+                            [
+                                "values"=> [
+                                    "Чехол на диван угловой левосторонний \"BULSAN\" 2+3 посадочных мест" => 92,
+                                    "Чехол на диван угловой левосторонний KARNA  \"MILANO\"" => 92,
+                                ],
+                                "defName" => "Чехол на диван угловой левосторонний",
+                                "feats" => [
+                                    162 => "Диван угловой",
+                                ],
+                            ],
+                            [
+                                "values"=> [
+                                    "Чехол на диван угловой правосторонний \"BULSAN\" 2+3 посадочных мест" => 92,
+                                    'Чехол на диван угловой правосторонний KARNA "MILANO" ' => 92,
+                                ],
+                                "defName" => "Чехол на диван угловой правосторонний",
+                                "feats" => [
+                                    162 => "Диван угловой",
+                                ],
+                            ],
+                        ],
+
+                ],
+
+
+        ],
+
+    ];
+
+    protected $defNamesExpected = [
+        "Комплекты полотенец" => "Комплект полотенец",
+        "Полотенца в коробке" => "Полотенце в коробке",
+        "Полотенца из бамбука" => "Комплект полотенец",
+        "Полотенца" => "Комплект полотенец",
+    ];
+
+    protected $priceFilter = [
+
+        "Полотенца в коробке" => 500,
+        "Полотенца из бамбука" => 1000,
+        "Полотенца" => 600,
+    ];
+
     protected $categories = [
         "Постельное белье" => 1,
 //        "Подушки" => 2,
@@ -42,17 +236,22 @@ class ParserKarna extends Command
         "Пледы" => 4,
         "Покрывала" => 5,
 //        "Наволочки" => 8,
-        "Наматрасники" => 9,
+        "Наматрасник" => 9,
         "Пододеяльник - наволочки" => 10,
         "Простыни" => 11,
         "Простынь на резинке" => 11,
         "Коврики" => 12,
         "Скатерти" => 15,
+        "Комплекты полотенец" => 91,
+        "Полотенца в коробке" => 91,
+        "Полотенца из бамбука" => 91,
+//        "Полотенца" => 91,
+//        "Чехлы" => 92,
     ];
 
     protected $cat_features  = [
-        1 => [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,22],
-        2 => [25,26,27,28,29,30,31,32,33,34],
+        1 => [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,22,151],
+        2 => [25,26,27,28,29,30,31,32,33,34,150],
         3 => [37,38,39,40,41,42,43,44,45,46,47,48,49,50],
         4 => [53,54,55,56,57,58,59,60,61],
         5 => [64,68,69,70,71,72,73,74,75,76,77,78],
@@ -64,6 +263,8 @@ class ParserKarna extends Command
 //        14 => [116,117,118,119,120,121,122,123,124,125,126,127],
         12 => [142,143,144,145,146,147,148,149],
         15 => [130,131,132,133,134,135,136,137,138,139],
+        91 => [152,153,154,155,156,157,158,159,160,161],
+        92 => [162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206],
     ];
 
     protected $defNames = [
@@ -79,7 +280,9 @@ class ParserKarna extends Command
         12=>"Коврик",
         13=>"Простынь на резинке",
         14=>"Простынь без резинки",
-        15=>"Скатерть"
+        15=>"Скатерть",
+        91=>"Комплект полотенец",
+        92=>"Чехол",
     ];
 
     protected $sn = [
@@ -96,42 +299,91 @@ class ParserKarna extends Command
         12=>"CV",
         14=>"SN",
         15=>"SK",
+        91=>"TL",
+        92=>"CS",
     ];
 
     protected $features = [
         // 1.Постельное белье
         'Наименование'=>[2,53,64,93,106,116,130,142],
-        'Размер-для-сайта'=>[3,55,69,118,133],
-        'Размер'=>[4,56,70,94,107,117,132,144],
+        'Размер-для-сайта'=>[3,55,69,118,133,152],
+        'Размер'=>[4,27,40,56,70,83,94,107,117,132,144,153],
         'Размер наволочек'=>[6,73,125],
-        'Количество наволочек'=>[7,72,124],
+        'Количество наволочек'=>[7,72,88,124],
         'Пододеяльник'=>[8],
         'Количество пододеяльников'=>[9],
         'Простынь'=>[10],
         'Материал'=>[11],
-        'Состав'=>[12,58,74,109,120,136,146],
-        'ХарактеристикаНоменклатуры'=>[13,59,76,101,111,122,138,148],
+        'Состав'=>[12,58,74,85,109,120,136,146,157,167],
+        'ХарактеристикаНоменклатуры'=>[13,59,76,87,101,111,122,138,148,156,163],
         'Вид застежки'=>[14],
-        'Страна'=>[22,61,78,103,113,127,139,149],
-        'Плотность'=>[75,110,121,137,147],
+        'Страна'=>[22,34,50,61,78,90,103,113,127,139,149,161,170],
+        'Плотность'=>[75,86,110,121,137,147,151,158,166],
         'Пропитка'=>[134],
-        'Наполнитель'=>[97],
-        'Плотность наполнителя'=>[98],
-        'Ткань верха'=>[99],
+        'Наполнитель'=>[29,97],
+        'Плотность наполнителя'=>[47,98,150],
+        'Плотность Ткани верха'=>[99],
+        'Ткань верха'=>[30,45,99],
         'Ткань низа'=>[100],
-
-
+        'Количество полотенец'=>[155],
+        'Единица измерения'=>[159,168],
+        'Вес единицы'=>[169],
+        'Высота спинки от посадочного места (Двухместный)' => [171],
+        'Высота юбки (Двухместный)' => [172],
+        'Глубина посадочных мест (Двухместный)' => [173],
+        'Ширина подлокотников (Двухместный)' => [174],
+        'Ширина посадочных мест (Двухместный)' => [175],
+        'Высота спинки от посадочного места (Трехместный)' => [176],
+        'Высота юбки (Трехместный)' => [177],
+        'Глубина посадочных мест (Трехместный)' => [178],
+        'Ширина подлокотников (Трехместный)' => [179],
+        'Ширина посадочных мест (Трехместный)' => [180],
+        'Высота спинки от посадочного места' => [181],
+        'Высота юбки' => [182],
+        'Глубина посадочных мест' => [183],
+        'Ширина подлокотников' => [184],
+        'Высота подлокотников длиной стороны' => [185],
+        'Высота подлокотников короткой стороны' => [186],
+        'Ширина подлокотников длинной стороны' => [187],
+        'Ширина подлокотников короткой стороны' => [188],
+        'Глубина посадочного места короткой стороны' => [189],
+        'Глубина посадочных мест длинной стороны' => [190],
+        'Высота спинки от посадочного места длинной стороны' => [191],
+        'Высота спинки от посадочного места короткой сторон' => [192],
+        'Ширина посадочных мест (длинной стороны)' => [193],
+        'Ширина посадочных мест (короткой стороны)' => [194],
+        'Ширина посадочных мест длинной стороны' => [195],
+        'Ширина посадочных мест короткой стороны' => [196],
+        'Высота подлокотников (Кресло)' => [197],
+        'Высота спинки от посадочного места (Кресло)' => [198],
+        'Высота юбки (Кресло)' => [199],
+        'Ширина и глубина посадочного места (Кресло)' => [200],
+        'Ширина подлокотников (Кресло)' => [201],
+        'Ширина посадочных мест (Стула)' => [202],
+        'Ширина спинки (Стула)' => [203],
+        'Длина посадочных мест (Стула)' => [204],
+        'Высота спинки от посадочного места (Стула)' => [205],
+        'Высота юбки (Стула)' => [206],
 
     ];
 
-    protected $cat_limit = [
-        1=>1499,
-        2=>499,
-        3=>599,
-        4=>599,
+
+
+    private $cat_limit = [
+        1 => 1499,
+        2 => 699,
+        3 => 799,
+        4 => 599,
         5=>799,
-        8=>299,
-        9=>499,
+        8 => 449,
+        9 => 499,
+        11 => 549,
+        12 => 499,
+        15 => 749,
+    ];
+
+    protected $cat_multiplier = [
+      92 => 1.6,
     ];
 
     protected $import_file = 'karna.xml';
@@ -143,10 +395,12 @@ class ParserKarna extends Command
         'brand'=>'brand',
         'sku'=>'sku',
         'price'=>'price',
+        'optPrice'=>'optPrice',
         'name'=>'name',
         'stock'=>'stock',
         'images'=>'images',
         'body'=>'body',
+        'manu'=>'manu',
     ];
 
     protected $items;
@@ -164,6 +418,7 @@ class ParserKarna extends Command
      */
     public function handle()
     {
+
 
 
 
@@ -187,16 +442,24 @@ class ParserKarna extends Command
                 }
                 $xml->{"ХарактеристикаНоменклатуры"} = $attributes->{"ХарактеристикаНоменклатуры"};
                 $xml->price = ceil( $attributes->{"Цена"} * 1.7 );
+                $xml->optPrice = $attributes->{"Цена"};
                 $xml->sku = $attributes->{"Идентификатор"};
                 $xml->external_id = $attributes->{"Штрихкод"};
                 $xml->images = $attributes->{"Файл"};
                 $xml->name = $attributes->{"Наименование"};
                 $xml->category = $attributes->{"Категория"};
+
                 $xml->brand = "KARNA";
 
                 foreach ( $xml->{"Свойствы"}->{"Свойство"} as $f ) {
                     $attr = $f->attributes();
-                    $xml->{$attr->{"Имя"}} = $attr->{"Значение"};
+
+                    if($attr->{"Имя"} == "Изготовитель" && isset($this->manufactures[(string)$attr->{"Значение"}])) {
+                        $xml->brand = $this->getBrand((string)$attr->{"Значение"});
+                        $xml->manu = (string)$attr->{"Значение"};
+                    } else {
+                        $xml->{$attr->{"Имя"}} = $attr->{"Значение"};
+                    }
 //                print_r($attr->{"Имя"});
                 }
                 foreach ( $xml->{"ДополнительныеФайлы"}->{"Файл"} as $f ) {
@@ -210,6 +473,8 @@ class ParserKarna extends Command
 //            $xml->id = (int) preg_replace("/\D/", "", $attributes->{"id"});
 //            if(isset($this->categories[(int)$xml->categoryId]) && (int)$xml->quantity > 1) {
 
+//                if($xml->category == "Чехлы")
+//                    print_r($xml);
                 $this->items[] = $xml;
 //            }
 
@@ -219,9 +484,11 @@ class ParserKarna extends Command
             $reader->parse();
             $reader->close();
 
-//        print_r((array)$this->items[0]);
-//        $it = $this->convert_item((array)$this->items[350]);
+//        print_r((array)$this->items[1379]);
+//        print_r((array)$this->categories_filter);
+//        $it = $this->convert_item((array)$this->items[1379]);
 //        print_r($it);
+//        return false;
 
             foreach ( $this->items as $k => $item ) {
                 $item = (array)$item;
@@ -230,14 +497,27 @@ class ParserKarna extends Command
                     $item[ (string)$value->attributes()->name ] = (string)$value;
                 }
 
+
+//                if($item['category'] == "Чехлы") {
+//                    print_r( $item );
+////                    echo $k."\n";
+//                }
+
                 $it = $this->convert_item( $item );
 
-//            echo $it['cat']."\n";
+
+//                if($item['category'] == "Чехлы") {
+//                    print_r( $it );
+//
+//                }
 
                 if ( $it[ 'cat' ] ) {
-//                    print_r($it);
+
+//                    if($it['cat'] == 91)
+//                        print_r($it);
 //                die();
-                    $this->import_item( $it );
+//                    if($it['cat'] == 91 || $it['cat'] == 92)
+                     $this->import_item( $it );
 
                 }
 
@@ -264,6 +544,8 @@ class ParserKarna extends Command
 
         $cat_id = $item['cat'];
         $name = $this->defNames[$cat_id];
+        if(isset($item['defName']))
+            $name = $item['defName'];
         $shortName = $this->sn[$cat_id];
 
         // Подготовим товар для добавления в базу
@@ -275,6 +557,8 @@ class ParserKarna extends Command
                 $product_id = $variant->product_id;
                 $variant_id = $variant->id;
                 $product = Product::find($product_id);
+                if($product->enabled == 0)
+                    return false;
             } else {
                 $variant = new Variant();
                 $product = new Product();
@@ -318,6 +602,9 @@ class ParserKarna extends Command
 
             if(isset($item['price']))
                 $variant->price = str_replace(',', '.', str_replace(' ', '', trim($item['price'])));
+
+            if(isset($this->cat_multiplier[$cat_id]))
+                $variant->price = ceil((float)$this->cat_multiplier[$cat_id]*str_replace(',', '.', str_replace(' ', '', trim($item['optPrice']))));
 
             if(isset($item['compare_price']))
                 $variant->compare_price = trim($item['compare_price']);
@@ -365,9 +652,14 @@ class ParserKarna extends Command
 
         $price_limit = isset($this->cat_limit[$category_id]) ? $this->cat_limit[$category_id] : 0;
 
+
 //        echo $price_limit."\n";
         if(empty($variant_id)  && (int)$variant->stock > 1 && (float)$variant->price >= $price_limit)
         {
+
+            if(isset($item['priceFilter']) && $item['priceFilter'] > $item['optPrice'])
+                return false;
+
             if(empty($product_id)) {
 
                 $product->save();
@@ -541,11 +833,58 @@ class ParserKarna extends Command
                     $cat = $v;
             }
         }
-        $result['cat'] = $cat;
-        if($result['cat']==10){
-            if($item['Размер-для-сайта'] != 'Пододеяльник')
-                $result['cat'] = '';
+
+        if(isset($this->defNamesExpected[(string)$item['category']])){
+            $result["defName"] = $this->defNamesExpected[(string)$item['category']];
         }
+
+        if(isset($this->priceFilter[(string)$item['category']])){
+            $result["priceFilter"] = $this->priceFilter[(string)$item['category']];
+        }
+
+
+
+
+        if(isset($this->categories_filter[(string)$item['category']])) {
+            if(isset($this->categories_filter[(string)$item['category']]['option'])){
+                foreach ($this->categories_filter[(string)$item['category']]['option'] as $option => $group) {
+//                        print_r($option."\n");
+                        if ( isset( $item[ $option ] ) ) {
+                            $oval = (string)$item[ $option ];
+                            foreach ($group as $filter) {
+                                foreach ( $filter[ 'values' ] as $k => $v ) {
+
+
+                                    if ( $oval === $k ) {
+//                                        echo $oval."  -  ".$k."\n";
+//                                        echo ($oval===$k)."\n";
+
+                                        $cat = $v;
+                                        if ( isset( $filter[ "defName" ] ) ) {
+                                            $result[ "defName" ] = $filter[ "defName" ];
+                                        }
+                                        if ( isset( $filter[ "feats" ] ) ) {
+                                          foreach ($filter["feats"] as $fid => $fval){
+                                              $result[$fid] = $fval;
+                                          }
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+
+                }
+            }
+        }
+
+        $result['cat'] = $cat;
+
+
+//        if($result['cat']==10){
+//            if($item['Размер-для-сайта'] != 'Пододеяльник')
+//                $result['cat'] = '';
+//        }
 
 //        print_r($this->categories[(string)$item->category]);
 
@@ -563,5 +902,17 @@ class ParserKarna extends Command
 
 
         return $result;
+    }
+
+    private function getBrand($brand){
+        foreach ($this->manufactures as $k=>$v) {
+
+            if (strpos($brand, $k) !== false) {
+//                echo $brand." - ".$k."\n";
+//                echo strpos($brand, $k)."\n";
+                return $v;
+            }
+        }
+        return "KARNA";
     }
 }

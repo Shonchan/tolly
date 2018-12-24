@@ -303,6 +303,8 @@ class SearchController extends Controller
         if(empty($img))
             return false;
 
+//        $img = str_replace('.JPEG', '.jpg', $img);
+
         $resizePath = storage_path('app/public').DIRECTORY_SEPARATOR;
         $parts = explode('.', $img);
         $filename = $parts[0].$width.'x'.$height.'.'.$parts[1];

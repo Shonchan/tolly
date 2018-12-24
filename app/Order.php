@@ -14,12 +14,12 @@ class Order extends Model
      * @return type
      */
     public function generateEcApiId(){
-        return "{$this->id}_".date('Y-m-d_H:i:s')."_".hash('adler32', $this->id.time());
+        return "{$this->id}_".date('d.m.Y_H:i:s');
     }
     
     public static function formatPhoneToNumber($phoneString){
         
-        return preg_replace('|\+(7)\s+\((\d+)\)\s+(\d+)-(\d+)-(\d+)|', '$1$2$3$4$5', $phoneString);
+        return str_replace(['+', '(', ')', '-', '_', ' '], '', $phoneString);
         
     }
 

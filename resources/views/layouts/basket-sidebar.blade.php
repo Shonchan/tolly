@@ -13,7 +13,7 @@
             </li>
             <li>
                 Оплата
-                <i>Картой или наличными  при получении</i>
+                <i>Картой онлайн, наличными при получении</i>
             </li>
         </ul>
     </div>
@@ -23,9 +23,11 @@
     <div class="coupone is-faq">
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Промокод на скидку" value="{{$couponeCode}}">
-            <button class="submit"><i class="fas fa-arrow-circle-right"></i></button>
-            <button class="cancel"><i class="fas fa-exclamation-circle"></i></button>
-            <b><i class="fas fa-check-circle"></i></b>
+            <button type="button" class="submit"><i class="fas fa-arrow-circle-right"></i></button>
+            {{--<button type="button" class="cancel"><i class="fas fa-exclamation-circle"></i></button>--}}
+            {{--<b><i class="fas fa-check-circle"></i></b>--}}
+            <button class="cancel"><i class="fas fa-check-circle"></i></button>
+            <b><i class="fas fa-exclamation-circle"></i></b>
             <span class="success text-green">Теперь ваш заказ стоит на&nbsp;500&nbsp;руб. дешевле!</span>
             <span class="danger text-red">Неправильный промокод</span>
             <span class="faq"><i class="fas fa-question-circle tooltip" title="Укажите ваш промо-код, для получения скидки на товары"></i></span>
@@ -34,7 +36,7 @@
     <div class="basket-sidebar-complete">
         <ul>
             <li>Товары <amount>({{$total_amount}})</amount> <span>{{$total}} руб.</span></li>
-            <li>Доставка @if($total < $freeDelivery)<span>300 руб</span>@else<span class="text-green">бесплатно</span>@endif</li>
+            {{--<li>Доставка @if($total < $freeDelivery)<span>300 руб</span>@else<span class="text-green">бесплатно</span>@endif</li>--}}
             {{--<li>Скидка на товары <span class="text-bold text-red">-500 руб.</span></li>--}}
             @if($discountValue)<li>Скидка <br>по промокоду <span class="text-bold text-red">-{{$discountValue}} руб.</span></li>@endif
             <li class="text-bold">Итого <span>{{ $total - $discountValue." руб." }}</span></li>

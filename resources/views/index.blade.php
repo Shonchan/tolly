@@ -94,20 +94,20 @@
                         </div>
                     </div>
                     <div class="basket-spinner">
-                        <input type="text" class="spinner_one" name="variants[amount][]" value="0">
-                        <div class="basket-price">
-                            {!! Form::hidden('variants[id][]', 0) !!}
-                            {!! Form::hidden('price', 0) !!}
-                            <span class="price"><u>Цена: </u>{{ "0 руб/шт" }}</span>
+                        {!! Form::hidden('variants[id][]', 0) !!}
+                        {!! Form::hidden('variants[price][]', 0) !!}
+                        {!! Form::hidden('variants[amount][]', 0, ['data-max'=>20]) !!}
+                        <div class="ui-spin">
+                            <span class="minus" onclick=""></span>
+                            <div class="count">0</div>
+                            <span class="plus" onclick=""></span>
                         </div>
+                        <div class="cost"></div>
                     </div>
-                    <div class="basket-total"><u>Итого: </u><span>{{ "0 руб." }}</span></div>
+                    <div class="basket-total"><span>{{ "0 руб." }}</span></div>
                     <div class="basket-remove"></div>
                 </div>
                 <div class="blank-more">
-                    {{--<div class="blank-content articles">--}}
-                    {{--<a href="javascript:;">В корзине 2 товара</a> на сумму 8200 рублей--}}
-                    {{--</div>--}}
                     <div class="blank-submit">
                         <a href="javascript:;"  onclick="$.fancybox.close();" class="btn btn2">Продолжить покупки</a>
                         <a href="{{ url('cart') }}" class="btn btn3">Перейти в корзину</a>

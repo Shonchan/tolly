@@ -80,7 +80,10 @@ class UpdateKarna extends Command
                     $xml->stock = 0;
                 }
                 $xml->{"ХарактеристикаНоменклатуры"} = $attributes->{"ХарактеристикаНоменклатуры"};
-                $xml->price = ceil( $attributes->{"Цена"} * 1.7 );
+                if($attributes->{"Категория"} == "Чехлы")
+                    $xml->price = ceil( $attributes->{"Цена"} * 1.6 );
+                else
+                    $xml->price = ceil( $attributes->{"Цена"} * 1.7 );
                 $xml->sku = $attributes->{"Идентификатор"};
                 $xml->external_id = $attributes->{"Штрихкод"};
                 $xml->images = $attributes->{"Файл"};
@@ -117,9 +120,15 @@ class UpdateKarna extends Command
                 if ( isset( $it[ 'category' ], $this->categories ) ) {
                     $variant = Variant::where( 'sku', '=', $it[ 'sku' ] )->first();
 
+                    if($variant->product()->enabled == 0)
+                        continue;
 
                     if ( $variant ) {
                         $item = [];
+
+                        $cat_id = \DB::table('products_categories')->select('category_id')->where('product_id', '=', $variant->product_id)->first();
+
+
                         if ( isset( $it[ 'stock' ] ) ) {
                             $item[ 'stock' ] = trim( $it[ 'stock' ] );
                         } else {
@@ -127,6 +136,9 @@ class UpdateKarna extends Command
                         }
                         if ( isset( $it[ 'price' ] ) ) {
                             $item[ 'price' ] = trim( $it[ 'price' ] );
+                            if($cat_id->category_id == 1) {
+                                $item['compare_price'] =  floor($item['price']*1.45) ;
+                            }
                         }
 
                         $item['updated_at'] = date("Y-m-d H:i:s");
